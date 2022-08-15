@@ -1,0 +1,190 @@
+.apio__NFTVendor
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.apio__NFTVendor--listNFT,
+.apio__NFTVendor--listNFT form
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 50%;
+}
+
+.apio__NFTVendor--listNFT
+{
+  flex: 2;
+}
+
+.apio__NFTVendor--listNFT h1
+{
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 35px;
+  line-height: 30px;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.apio__NFTVendor--listNFT form input
+{
+  border: 1px solid #fff;
+  border-radius: 15px;
+  background: rgba(0,0,0,0);
+  padding: 0.6rem;
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 15px;
+  color: #fff;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.apio__NFTVendor--listNFT form button,
+.apio__NFTVendor--vendor_profile--withdraw
+{
+  padding: 0.5rem 1rem;
+  font-family: var(--font-family);
+  font-size: 18px;
+  line-height: 25px;
+  font-weight: 500;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: rgba(255, 20, 147, 0.7);
+  cursor: pointer;
+}
+
+.apio__NFTVendor--vendor_profile--withdraw:disabled
+{
+  background: #838383;
+  cursor: default;
+}
+
+.apio__NFTVendor--vendor_profile
+{
+  flex: 0.5;  
+  margin-left: auto;
+  border-radius: 30px;
+  padding: 1.7rem;
+  background: rgba(19,14,21,0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.apio__NFTVendor--vendor_profile--account
+{
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem 0.3rem 0.4rem;
+  background: rgba(255, 20, 147, 0.5);
+  border-radius: 30px;
+  margin-bottom: 2rem;
+}
+
+.apio__NFTVendor--vendor_profile--account div
+{
+  border-radius: 50%;
+  /* height: 30px; */
+  background: -webkit-linear-gradient(161deg, rgba(20, 147, 255, 1) 0%, rgba(238, 130, 238, 1) 66%, rgba(238, 130, 238, 1) 100%);
+  padding: 0.6rem;
+  margin-right: 0.4rem;
+}
+
+.apio__NFTVendor--vendor_profile--account p,
+.apio__NFTVendor--vendor_profile--earnings p
+{
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 15px;
+  color: #fff;
+  letter-spacing: 0.03em;
+}
+
+.apio__NFTVendor--vendor_profile--earnings p
+{
+  margin-bottom: 2rem;
+}
+
+
+
+@media screen and (max-width: 1050px)
+{
+  .apio__NFTVendor--vendor_profile
+  {
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 850px)
+{
+  .apio__NFTVendor--vendor_profile
+  {
+    flex: 0.6;
+  }
+
+  .apio__NFTVendor--listNFT
+  {
+    flex: 1;
+  }
+
+  .apio__NFTVendor--listNFT form
+  {
+    width: 80%;
+  }
+
+  .apio__NFTVendor--listNFT form input
+  {
+    font-size: 12px;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .apio__NFTVendor--listNFT h1
+  {
+    font-size: 30px;
+    line-height: 24px;
+  }
+}
+
+@media screen and (max-width: 550px)
+{
+  .apio__NFTVendor
+  {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .apio__NFTVendor--vendor_profile
+  {
+    margin: 0 0 4rem;
+  }
+
+  .apio__NFTVendor--listNFT h1
+  {
+    font-size: 25px;
+    line-height: 20px;
+  }
+
+  .apio__NFTVendor--listNFT
+  {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 350px)
+{
+  .apio__NFTVendor--listNFT
+  {
+    width: 100%;
+  }
+}

@@ -1,0 +1,19 @@
+.apio__brands
+{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.apio__brands div
+{
+  flex: 1;
+  max-width: 150px;
+  min-width: 130px;
+  margin: 1rem;
+
+  display: flex; /* for the images themselves*/
+  justify-content: center;
+  align-items: center;
+}

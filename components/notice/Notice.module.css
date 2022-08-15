@@ -1,0 +1,39 @@
+.apio__notice
+{
+  display: flex;
+  /* padding: 1rem 20rem 0; */
+  padding-top: 1rem;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.apio__notice--border
+{
+  width: 50%;
+  border: 4px;
+  border-color: rgba(255, 20, 147, 0.7);
+  border-style: double none;
+  padding: 0.6rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.apio__notice--text
+{
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
+  overflow-y: hidden;
+}
+
+@media screen and (max-width: 350px)
+{
+  .apio__notice--border
+  {
+    width: 60%;
+  }
+}

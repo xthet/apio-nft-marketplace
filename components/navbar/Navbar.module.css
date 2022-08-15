@@ -1,0 +1,279 @@
+.apio__navbar
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4rem 0.8rem;
+  /* background: rgba(0, 0, 0, 0.9); */
+  /* box-shadow: 0 0.5px 2px 0px rgba(214, 214, 214, 0.1); */
+  /* top: 0; */
+  /* width: 100%; */
+  /* position: fixed; */
+  z-index: 5;
+  /* margin: 1rem 1rem 0; */
+  /* border-radius: 10px; */
+}
+
+.apio__navbar--menu
+{
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.apio__navbar--menu_logo
+{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-right: 4rem;
+  cursor: pointer;
+}
+
+.apio__navbar--menu_logo .nimg
+{
+  width: 33.8px;
+  height: 33.8px;
+  margin-right: 0.6rem;
+}
+
+.apio__navbar--menu_logo h1
+{
+  color: #fff;
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 25px;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.4rem;
+}
+
+.apio__navbar--menu_search
+{
+  margin-right: 1rem;
+  flex: 0.45;
+}
+
+.apio__navbar--menu_search--form
+{
+  border: 1px solid rgba(214, 214, 214, 0.5);
+  border-radius: 10px;
+  padding: 0.4rem 1rem;
+  width: 100%;
+  display: flex;
+}
+
+.apio__navbar--menu_search--form input
+{
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 18px;
+  color: #fff;
+  width: 100%;
+}
+
+.apio__navbar--menu_search--form input,
+.apio__navbar--menu_search--form button
+{
+  background: rgba(0,0,0,0);
+  border: none;
+  outline: none;
+}
+
+
+.apio__navbar--menu_container
+{
+  display: flex;
+  justify-content: space-between;
+  flex: 0.5;
+  margin-right: 4rem;
+}
+
+
+
+.apio__navbar--menu_container p
+{
+  color: #d6d6d6;
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 25px;
+  letter-spacing: 0.03em;
+  /* margin: 0 2rem 0 0; */
+  cursor: pointer;
+}
+
+.apio__navbar--menu_connect
+{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.apio__navbar--menu_connect button,
+.apio__navbar--hamburger_menu--connect button
+{
+  padding: 0.5rem 1rem;
+  font-family: var(--font-family);
+  font-size: 18px;
+  line-height: 25px;
+  font-weight: 500;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: rgba(255, 20, 147, 0.7);
+  cursor: pointer;
+}
+
+.apio__navbar--menu_connect button:disabled,
+.apio__navbar--hamburger_menu--connect button:disabled
+{
+  background: rgba(20, 147, 255, 0.7);
+  cursor: default;
+}
+
+.apio__navbar--hamburger_menu
+{
+  margin-left: 1rem;
+  display: none;
+  position: relative;
+}
+
+.apio__navbar--hamburger_menu svg
+{
+  cursor: pointer;
+}
+
+.apio__navbar--hamburger_menu--container
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-direction: column;
+  text-align: end;
+  background: var(--color-footer);
+  padding: 1rem;
+  position: absolute;
+  top: 35px;
+  right: 0;
+  /* margin-top: 1rem; */
+  min-width: 200px;
+  min-height: 230px;
+  border-radius: 5px;
+  box-shadow: 0 0 5 rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.apio__navbar--hamburger_menu--container p
+{
+  /* margin: 1rem 0; */
+  color: #fff;
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 25px;
+  cursor: pointer;
+}
+
+.apio__navbar--hamburger_menu--connect
+{
+  display: none;
+}
+
+.apio__navbar--hamburger_menu--connect button
+{
+  font-size: 12px;
+  line-height: 20px;
+  padding: 0.4rem 1rem;
+}
+
+
+@media screen and (max-width: 1050px)
+{
+  .apio__navbar--menu
+  {
+    justify-content: space-between;
+    align-items: center;
+  }
+  .apio__navbar--menu_search
+  {
+    margin: 0rem;
+    flex: 0.3;
+  }
+
+  .apio__navbar--menu_container
+  {
+    flex: 0.5;
+    margin: 0rem;
+  }
+
+  .apio__navbar--menu_logo
+  {
+    margin: 0rem;
+  }
+
+  .apio__navbar--menu_search--form
+  {
+
+    /* padding: 0.2rem 0.8rem; */
+    width: 100%;
+  }
+  
+  .apio__navbar--menu_search--form input
+  {
+
+    font-size: 14px;
+
+  }
+
+  .apio__navbar--menu_connect
+  {
+    margin: 0;
+  }
+
+  .apio__navbar--menu_connect button
+  {
+    font-size: 15px;
+    padding: 0.5rem 0.8rem;
+    line-height: 20px;
+  }
+}
+
+
+@media screen and (max-width: 850px)
+{
+  .apio__navbar--menu_container,
+  .apio__navbar--menu_connect,
+  .apio__navbar--menu_search
+  {
+    display: none;
+  }
+
+  .apio__navbar--hamburger_menu,
+  .apio__navbar--hamburger_menu--connect
+  {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 750px)
+{
+  .apio__navbar
+  {
+    padding: 2rem;
+  }
+
+  .apio__navbar--menu_connect button
+  {
+    font-size: 12px;
+    line-height: 20px;
+    padding: 0.4rem 1rem;
+  }
+}
+
+@media screen and (max-width: 450px)
+{
+
+}

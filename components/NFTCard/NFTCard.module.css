@@ -1,0 +1,466 @@
+.apio__NFTCard
+{
+  background: rgba(19,14,21,1);
+  padding: 1rem;
+  border-radius: 20px;
+  width: 280px;
+  height: 392px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.apio__NFTCard--image
+{
+  width: 100%;
+  height: 100%;
+}
+
+.apio__NFTCard--image .nimg
+{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.apio__NFTCard--image .nimg img
+{
+  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.apio__NFTCard--text
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1rem 0.5rem 0;
+  width: 100%;
+}
+
+.apio__NFTCard--text--name,
+.apio__NFTCard--text--user_options--name
+{
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 16px;
+  line-height: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.6rem;
+}
+
+.apio__NFTCard--text--user_options--name
+{
+  margin-bottom: 0;
+  width: 55%
+}
+
+.apio__NFTCard--text--user_options
+{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  width: 100%;
+}
+
+.apio__NFTCard--creator
+{
+  color: #b8b8b8;
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 15px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.6rem;
+}
+
+.apio__NFTCard--text--price
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.apio__NFTCard--text--price h3
+{
+  color: rgba(20,147,255, 1);
+  font-family: var(--font-family);
+  font-size: 20px;
+  line-height: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.apio__NFTCard--eth_icon
+{
+  color: #1493ff;
+  width: 20px;
+  height: 20px;
+}
+
+.hide_collectNFT,
+.hide_updateNFT
+{
+  display: none;
+}
+
+.apio__NFTCard--collectNFT button,
+.apio__NFTCard--updateNFT--container button
+{
+  padding: 0.5rem 1rem;
+  font-family: var(--font-family);
+  font-size: 15px;
+  line-height: 25px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: rgba(20,147,255, 0.7);
+  cursor: pointer;
+  width: 100%;
+}
+
+.apio__NFTCard--collectNFT,
+.apio__NFTCard--updateNFT
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.6rem;
+}
+
+.apio__NFTCard:hover
+{
+  border: 2px solid rgba(20,147,255, 0.7);
+  box-shadow: 0 10px 12px 4px rgba(20,147,255, 0.4);
+}
+
+.apio__NFTCard--removeNFT
+{
+  width: 45%;
+  margin-left: auto;
+  background: rgba(20,147,255, 1);
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  padding: 0 0.5rem;
+  color: rgba(19,14,21,1);
+  font-family: var(--font-family);
+  font-size: 15px;
+  /* line-height: 15px; */
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.apio__NFTCard--updateNFT--container
+{
+  border: 1px solid rgba(20,147,255, 0.7);
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.apio__NFTCard--updateNFT--container input
+{
+  background: none;
+  outline: none;
+  border: none;
+  border-radius: 15px 0 0 15px;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-family);
+  font-size: 15px;
+  /* line-height: 25px; */
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #fff;
+  width: 60%;
+  height: 100%;
+}
+
+.apio__NFTCard--updateNFT--container button
+{
+  width: 40%;
+  border-radius: 0 14px 14px 0;
+  /* height: 100%; */
+  line-height: 20px;
+  padding: 0.6rem 1rem;
+}
+
+
+
+@media screen and (max-width: 850px)
+{
+  .apio__NFTCard
+  {
+    width: 200px;
+    height: 280px;
+  }
+
+  .apio__NFTCard--text--name,
+  .apio__NFTCard--text--user_options--name
+  {
+    font-size: 13px;
+    line-height: 12px;
+    margin-bottom: 0.4rem;
+  }
+
+  .apio__NFTCard--text--user_options
+  {
+    margin-bottom: 0.4rem;
+  }
+
+  .apio__NFTCard--text--user_options--name
+  {
+    margin-bottom: 0rem;
+    width: 50%
+  }
+
+  .apio__NFTCard--creator
+  {
+    font-size: 11px;
+    line-height: 12px;
+    margin-bottom: 0.2rem;
+  }
+  
+  .apio__NFTCard--text--price h3
+  {
+    font-size: 17px;
+    line-height: 12px;
+  }
+
+  .apio__NFTCard--collectNFT button
+  {
+    padding: 0.3rem 0.6rem;
+    font-size: 12px;
+    line-height: 22px;
+    margin-top: 0.4rem;
+  }
+
+  .apio__NFTCard--eth_icon
+  {
+    width: 17px;
+    height: 17px;
+  }
+
+  .apio__NFTCard--removeNFT
+  {
+    width: 50%;
+    border-radius: 4px;
+    padding: 0 0.4rem;
+    font-size: 10px;
+  }
+
+  .apio__NFTCard--updateNFT--container
+  {
+    border-radius: 10px;
+  }
+  
+  .apio__NFTCard--updateNFT--container input
+  {
+    border-radius: 10px 0 0 10px;
+    padding: 0.2rem 0.3rem;
+    font-size: 10px;
+    letter-spacing: 0.03em;
+  }
+  
+  .apio__NFTCard--updateNFT--container button
+  {
+    border-radius: 0 9px 9px 0;
+    line-height: 16px;
+    padding: 0.2rem 0.3rem;
+    font-size: 10px;
+  }
+  
+}
+
+
+@media screen and (max-width: 550px)
+{
+  .apio__NFTCard
+  {
+    width: 142.86px;
+    height: 200px;
+    padding: 0.6rem;
+  }
+
+  .apio__NFTCard--text
+  {
+    padding: 0.8rem 0.3rem 0;
+  }
+
+  .apio__NFTCard--text--name,
+  .apio__NFTCard--text--user_options--name
+  {
+    font-size: 10px;
+    line-height: 10px;
+    margin-bottom: 0.1rem;
+  }
+
+  .apio__NFTCard--text--user_options--name
+  {
+    margin-bottom: 0rem;
+    width: 100%
+  }
+
+  .apio__NFTCard--text--user_options
+  {
+    margin-bottom: 0.1rem;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .apio__NFTCard--removeNFT
+  {
+    margin-bottom: 0.3rem;
+    width: 53%;
+    margin-left: 0;
+    border-radius: 4px;
+    padding: 0 0.2rem 0.05rem;
+    font-size: 8px;
+  }
+
+  .apio__NFTCard--creator
+  {
+    font-size: 9px;
+    line-height: 10px;
+    margin-bottom: 0.1rem;
+  }
+  
+  .apio__NFTCard--text--price h3
+  {
+    font-size: 14px;
+    line-height: 10px;
+  }
+
+  .apio__NFTCard--collectNFT button
+  {
+    padding: 0.1rem 0.4rem;
+    font-size: 9px;
+    line-height: 20px;
+    margin-top: 0.1rem;
+  }
+
+  .apio__NFTCard--eth_icon
+  {
+    width: 14px;
+    height: 14px;
+  }
+
+  .apio__NFTCard--updateNFT--container
+  {
+    border-radius: 10px;
+  }
+  
+  .apio__NFTCard--updateNFT--container input
+  {
+    border-radius: 10px 0 0 10px;
+    padding: 0.2rem 0.3rem;
+    font-size: 8px;
+    letter-spacing: 0.03em;
+  }
+  
+  .apio__NFTCard--updateNFT--container button
+  {
+    border-radius: 0 9px 9px 0;
+    line-height: 14px;
+    padding: 0.2rem 0.3rem;
+    font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 350px)
+{
+  .apio__NFTCard
+  {
+    width: 102.04px;
+    height: 150.86px;
+    padding: 0.6rem;
+  }
+
+  .apio__NFTCard--text
+  {
+    padding: 0.6rem 0.2rem 0;
+  }
+
+  .apio__NFTCard--text--name
+  {
+    font-size: 7px;
+    line-height: 8px;
+    margin-bottom: 0.08rem;
+  }
+
+  .apio__NFTCard--removeNFT
+  {
+    margin-bottom: 0.4rem;
+    width: 70%;
+    margin-left: 0;
+    border-radius: 4px;
+    padding: 0 0.2rem 0.05rem;
+    font-size: 8px;
+  }
+
+  .apio__NFTCard--creator
+  {
+    font-size: 6px;
+    line-height: 8px;
+    margin-bottom: 0.04rem;
+  }
+  
+  .apio__NFTCard--text--price h3
+  {
+    font-size: 9px;
+    line-height: 8px;
+  }
+
+  .apio__NFTCard--collectNFT button
+  {
+    padding: 0.07rem 0.2rem;
+    font-size: 7px;
+    line-height: 17px;
+    margin-top: 0.08rem;
+  }
+
+  .apio__NFTCard--eth_icon
+  {
+    width: 9px;
+    height: 9px;
+  }
+
+  .apio__NFTCard--updateNFT--container
+  {
+    border-radius: 10px;
+  }
+  
+  .apio__NFTCard--updateNFT--container input
+  {
+    border-radius: 10px 0 0 10px;
+    padding: 0.2rem 0.35rem;
+    font-size: 6px;
+    letter-spacing: 0.02em;
+  }
+  
+  .apio__NFTCard--updateNFT--container button
+  {
+    border-radius: 0 9px 9px 0;
+    line-height: 11px;
+    padding: 0.2rem 0.3rem 0.2rem 0.2rem;
+    font-size: 6px;
+  }
+}

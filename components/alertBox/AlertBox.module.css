@@ -1,0 +1,132 @@
+.apio__alertBox
+{
+  background: rgba(20,255,128,1);
+  box-shadow: 0 8px 10px 1px rgba(0,0,0,0.4);
+  padding: 0.2rem;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.failure
+{
+  background: rgba(255,20,30,1);
+}
+
+.isVisible
+{
+  display: block;
+}
+
+.notVisible
+{
+  display: none;
+}
+
+.scale-up-center
+{
+	-webkit-animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+.scale-out-center
+{
+  -webkit-animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+          animation: scale-out-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+
+@-webkit-keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+@keyframes scale-out-center {
+  0% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+@-webkit-keyframes notVisible {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+    opacity: 1;
+  }
+}
+@keyframes notVisible {
+  0% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+    opacity: 1;
+  }
+}
+
+.apio__alertBox--border
+{
+  border: 1px dashed #fff;
+  padding: 0.1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.apio__alertBox--heading
+{
+  width: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 0.4rem;
+}
+
+.apio__alertBox--heading h2
+{
+  font-family: var(--font-family);
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+  color: rgba(0,0,0,1);
+}
+
+.apio__alertBox--heading div
+{
+  height: 1px;
+  background: rgba(0,0,0,0.5);
+  width: 100%;
+}
+
+.apio__alertBox--body p
+{
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  color: rgba(0,0,0,1);
+}
+
+.apio__alertBox--body
+{
+  width: 100%;
+}

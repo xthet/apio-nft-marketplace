@@ -1,0 +1,252 @@
+.apio__footer_copyright--container
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.apio__footer
+{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.apio__footer--about
+{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 34%;
+}
+
+.apio__footer--about--logo
+{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-right: 4rem;
+  cursor: pointer;
+}
+
+.apio__footer--about--logo .nimg
+{
+  width: 33.8px;
+  height: 33.8px;
+  margin-right: 0.6rem;
+}
+
+.apio__footer--about--logo h1
+{
+  color: #fff;
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 25px;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.4rem;
+}
+
+.apio__footer--about--text
+{
+  margin-top: 1rem;
+}
+
+.apio__footer--about--text p
+{
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
+  width: 90%;
+}
+
+.apio__footer--about--social
+{
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.5rem;
+}
+
+.apio__footer--about--social--box
+{
+  border-radius: 10px;
+  padding: 0.6rem;
+  background: rgba(255, 20, 147, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.apio__footer--about--social-twitter,
+.apio__footer--about--social-github,
+.apio__footer--about--social-email
+{
+  color: #fff;
+  width: 25px;
+  height: 25px;
+}
+
+.apio__footer--menu_container
+{
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0.3rem 2rem;
+}
+
+.apio__footer--menu_container--marketplace,
+.apio__footer--menu_container--company
+{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.apio__footer--menu_container--marketplace
+{
+  margin-right: 4rem; 
+}
+
+.apio__footer--menu_container--marketplace p,
+.apio__footer--menu_container--company p
+{
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0.06em;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.apio__footer--menu_container ul li
+{
+  list-style-type: none;
+  margin-bottom: 0.8rem;
+
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.06em;
+  color: #FFFFFF;
+}
+
+.apio__copyright
+{
+  margin-top: 4rem;
+  text-align: center;
+  width: 100%;
+}
+
+.apio__copyright p
+{
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 20px;
+  letter-spacing: 0.06em;
+  color: var(--color-text);
+}
+
+
+
+
+@media screen and (max-width: 850px)
+{
+  .apio__footer--about--text p
+  {
+    width: 100%;
+  }
+
+  .apio__footer--about
+  {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 550px)
+{
+  .apio__footer--about
+  {
+    width: 57%;
+  }
+
+  .apio__footer--menu_container
+  {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0.3rem 0.5rem;
+  }
+
+  .apio__footer--menu_container--marketplace
+  {
+    margin: 0 0 2rem 0;
+  }
+
+  .apio__footer--menu_container ul li,
+  .apio__footer--about--text p,
+  .apio__copyright p
+  {
+    font-size: 10px;
+    /* line-height: 16px; */
+  }
+
+  .apio__footer--menu_container ul li
+  {
+    margin-bottom: 0.5rem;
+  }
+
+  .apio__footer--about--social-twitter,
+  .apio__footer--about--social-github,
+  .apio__footer--about--social-email
+  {
+    color: #fff;
+    width: 20px;
+    height: 20px;
+  }
+
+  .apio__footer--about--social--box
+  {
+    padding: 0.5rem;
+    border-radius: 10px;
+  }
+}
+
+@media screen and (max-width: 350px)
+{
+  .apio__footer--menu_container
+  {
+    padding: 0.02rem 0rem;
+  }
+
+  .apio__footer--about
+  {
+    width: 53%;
+  }
+
+  .apio__footer--about--logo .nimg
+  {
+    width: 23.8px;
+    height: 23.8px;
+  }
+  
+  .apio__footer--about--logo h1
+  {
+    font-size: 20px;
+    line-height: 20px;
+  }
+}

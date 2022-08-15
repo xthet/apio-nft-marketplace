@@ -1,0 +1,119 @@
+.apio__updateListing,
+.apio__updateListing--modal--listings--grid_container
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+
+.apio__updateListing--modal--heading
+{
+  margin-bottom: 2rem;
+}
+
+.apio__updateListing--modal--heading h1
+{
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 20px;
+  line-height: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  /* margin-bottom: 0.6rem; */
+}
+
+.apio__updateListing--isConnected,
+.apio__updateListing--notConnected
+{
+  display: none;
+}
+
+.apio__updateListing--toConnect
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 2rem;
+}
+
+.apio__updateListing--toConnect p
+{
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.8rem;
+  color: var(--color-text);
+}
+
+.apio__updateListing--toConnect button
+{
+  padding: 0.5rem 1rem;
+  font-family: var(--font-family);
+  font-size: 18px;
+  line-height: 25px;
+  font-weight: 500;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 20, 147, 0.7);
+  outline: none;
+  color: #fff;
+  background: rgba(255, 20, 147, 0);
+  cursor: pointer;
+}
+
+.apio__updateListing--modal--listings--grid_container
+{
+  border-width: 1px;
+  border-color: rgba(20,147,255, 1);
+  background: none;
+  border-radius: 20px;
+  border-style: solid solid none;
+  width: unset;
+  /* padding: 1rem 1rem; */
+}
+
+
+.apio__updateListing--grid
+{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1rem;
+  padding: 1rem;
+  margin-right: 0.2em;
+  max-height: 600px;
+  overflow-y: overlay;
+}
+
+.apio__updateListing--grid > h3:nth-of-type(1)
+{
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.8rem;
+  color: var(--color-text); 
+}
+
+
+@media screen and (max-width: 1050px)
+{
+  .apio__updateListing--grid
+  {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 550px)
+{
+  .apio__updateListing--grid
+  {
+    grid-template-columns: repeat(2, 1fr);
+    height: 400px; 
+  }
+}
