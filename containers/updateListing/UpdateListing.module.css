@@ -84,7 +84,7 @@
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 1rem;
   padding: 1rem;
-  margin-right: 0.2em;
+  /* margin-right: 0.2em; */
   max-height: 600px;
   overflow-y: overlay;
 }
