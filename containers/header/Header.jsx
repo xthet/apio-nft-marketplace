@@ -28,7 +28,9 @@ export default function Header({ connect, isConnected, account, signer })
         <div className={styles["apio__header--image_container--separator"]}></div>
         <div className={styles["apio__header--image_container--text"]}>
           <h3>{name}</h3>
-          <p>@{truncateStr(nftAddress || "", 12)}</p>
+          <a href={`https://rinkeby.etherscan.io/token/${nftAddress}`} target="_blank" rel="noopener noreferrer">
+            <p>@{truncateStr(nftAddress || "", 12)}</p>
+          </a>
         </div>
       </div>
     )
@@ -52,9 +54,8 @@ export default function Header({ connect, isConnected, account, signer })
           onClick={isConnected ? null : connect}>
 
           <FontAwesomeIcon icon="fa-solid fa-wallet" className={styles["apio__header--wallet_icon"]}/>
-          <a href={`https://rinkeby.etherscan.io/token/${account}`} target="_blank" rel="noopener noreferrer">
-            <p>{isConnected ? truncateStr(account || "", 12) : "Connect your wallet"}</p>
-          </a>
+          <p>{isConnected ? truncateStr(account || "", 12) : "Connect your wallet"}</p>
+
         </div>
       </div>
       {
