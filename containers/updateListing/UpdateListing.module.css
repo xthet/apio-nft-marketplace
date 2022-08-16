@@ -122,6 +122,6 @@
   .apio__updateListing--grid
   {
     grid-template-columns: repeat(2, 1fr);
-    height: 400px; 
+    height: 350px; 
   }
 }

@@ -15,7 +15,9 @@ export default function CollectionHeader({ name, address, floorPrice, imageURI }
           <div className={styles["apio__collectionHeader--image_container--separator"]}></div>
           <div className={styles["apio__collectionHeader--image_container--text"]}>
             <h3>{name}</h3>
-            <p>@{truncateStr(address || "", 12)}</p>
+            <a href={`https://rinkeby.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
+              <p>@{truncateStr(address || "", 12)}</p>
+            </a>
           </div>
         </div>
       </div>

@@ -17,7 +17,9 @@ export default function CollectionCard({ name, address, floorPrice, imageURI })
       </div>
       <div className={styles["apio__collectionCard--text"]}>
         <h3 className={styles["apio__collectionCard--text--name"]}>{`${name}`}</h3>
-        <a href=""><p className={styles["apio__collectionCard--creator"]}>@{truncateStr(address || "", 12)}</p></a>
+        <a href={`https://rinkeby.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
+          <p className={styles["apio__collectionCard--creator"]}>@{truncateStr(address || "", 12)}</p>
+        </a>
         {/* <p className={styles["apio__collectionCard--floor_price"]}>Floor Price</p> */}
         <div className={styles["apio__collectionCard--text--price"]}>
           <div className={styles["apio__collectionCard--floor_price"]}>
