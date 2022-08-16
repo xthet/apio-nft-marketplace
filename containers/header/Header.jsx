@@ -52,7 +52,7 @@ export default function Header({ connect, isConnected, account, signer })
           onClick={isConnected ? null : connect}>
 
           <FontAwesomeIcon icon="fa-solid fa-wallet" className={styles["apio__header--wallet_icon"]}/>
-          <a href={`https://rinkeby.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
+          <a href={`https://rinkeby.etherscan.io/token/${account}`} target="_blank" rel="noopener noreferrer">
             <p>{isConnected ? truncateStr(account || "", 12) : "Connect your wallet"}</p>
           </a>
         </div>
