@@ -95,8 +95,8 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         <button onClick={connect}>Connect your wallet</button>
       </div>
 
-      <div className={styles["apio__collections--grid_container"]} onScroll={handleGridScroll}>
-        <div className={isConnected ? styles["apio__collections--grid"] : styles["apio__collections--notConnected"]}>
+      <div className={styles["apio__collections--grid_container"]}>
+        <div className={isConnected ? styles["apio__collections--grid"] : styles["apio__collections--notConnected"]} onScroll={handleGridScroll}>
           {collections.length == 0 || !collections ? <p> </p> :
             collections.map((collection, index)=>{
               const { name, symbol, nftAddress } = collection

@@ -102,8 +102,8 @@ export default function NFTGrid({ connect, isConnected, chainId, signer, address
         <p>You need to connect your wallet to view NFTs</p>
         <button onClick={connect}>Connect your wallet</button>
       </div>
-      <div className={styles["apio__NFTGrid--grid_container"]} onScroll={handleGridScroll}>
-        <div className={isConnected ? styles["apio__NFTGrid--grid"] : styles["apio__NFTGrid--notConnected"]}>
+      <div className={styles["apio__NFTGrid--grid_container"]}>
+        <div className={isConnected ? styles["apio__NFTGrid--grid"] : styles["apio__NFTGrid--notConnected"]} onScroll={handleGridScroll}>
           {!currentNFTData ? <p>Loading...</p> : currentNFTData.map((NFT, index)=>{
             const { price, tokenId, nftAddress, seller } = NFT
             getTokenURI(nftAddress, tokenId)
