@@ -82,11 +82,11 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
       <div className={styles["apio__updateListing--modal--heading"]}>
         <h1>Your Listings</h1>
       </div>
+      <div className={isConnected ? styles["apio__updateListing--isConnected"] : styles["apio__updateListing--toConnect"]}>
+        <p>You need to connect your wallet to view NFTs</p>
+        <button onClick={connect}>Connect your wallet</button>
+      </div>
       <div className={styles["apio__updateListing--modal--listings--grid_container"]}>
-        <div className={isConnected ? styles["apio__updateListing--isConnected"] : styles["apio__updateListing--toConnect"]}>
-          <p>You need to connect your wallet to view NFTs</p>
-          <button onClick={connect}>Connect your wallet</button>
-        </div>
         <div className={isConnected ? styles["apio__updateListing--grid"] : styles["apio__updateListing--notConnected"]} onScroll={handleGridScroll}>
           {!activeUserNFTs ? <p>Loading...</p> : activeUserNFTs.length == 0 ? <h3>You have no active listings.</h3> : activeUserNFTs.map((NFT, index)=>{
             const { price, tokenId, nftAddress, seller } = NFT

@@ -92,7 +92,7 @@
 {
   /* width: 100%; */
   /* margin-top: 2rem; */
-  padding: 1rem;
+  padding: 1rem 0.5rem 1rem 1rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 1rem;
@@ -120,6 +120,14 @@
   {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1rem;
+  }
+}
+
+@media screen and (max-width: 990px)
+{
+  .apio__NFTGrid--grid_container
+  {
+    overflow-y: scroll
   }
 }
 

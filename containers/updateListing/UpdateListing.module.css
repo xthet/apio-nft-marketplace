@@ -109,6 +109,14 @@
   }
 }
 
+@media screen and (max-width: 990px)
+{
+  .apio__updateListing--grid
+  {
+    overflow-y: scroll;
+  }
+}
+
 @media screen and (max-width: 550px)
 {
   .apio__updateListing--grid
