@@ -189,6 +189,7 @@
     /* margin-top: 0.8rem; */
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 0.8rem;
+    max-height: 350px;
   }
 
   .apio__NFTGrid--grid_container
