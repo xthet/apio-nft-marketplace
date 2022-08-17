@@ -42,6 +42,14 @@ export default function useConnection()
           const provider = new ethers.providers.Web3Provider(window.ethereum)
           setSigner(provider.getSigner())
           const { chainId } = await provider.getNetwork()
+          if(chainId !== "4")
+          {
+            await ethereum.request({
+              method: "wallet_switchEthereumChain",
+              params: [{ chainId: "0x4" }],
+            })
+            console.log("You have switched to the right network")
+          }
           // console.log(chainId)
           setAccount(accounts[0])
           setChainId(chainId.toString())
@@ -67,7 +75,7 @@ export default function useConnection()
     if (typeof window.ethereum !== "undefined") {
       setHasMetamask(true)
       updateUI()
-    }
+    }else{alert("Pls Install Metamask")}
   }, [account, chainId])
 
   return { hasMetamask, isConnected, chainId, signer, account, connect }

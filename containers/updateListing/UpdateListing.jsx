@@ -1,16 +1,17 @@
-import styles from "./UpdateListing.module.css"
 import { useEffect, useState } from "react"
 import { NFTCard } from "../../components/exportComps"
 import { GET_COLLECTION_NAME, GET_USER_LISTINGS } from "../../constants/subGraphQueries"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
-import useTokenURI from "../../utils/useTokenURI"
+import { useRouter } from "next/router"
+import styles from "./UpdateListing.module.css"
+
 
 export default function UpdateListing({ connect, isConnected, chainId, signer, account })
 {
   const [activeUserNFTs, setActiveUserNFTs] = useState([])
-  const [currentCollectionName, setCurrentCollectionName] = useState(null)
+  // const [currentCollectionName, setCurrentCollectionName] = useState(null)
   const [currentOffset, setCurrentOffset] = useState(0)
-  const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
+  const router = useRouter()
   
 
   const client = new ApolloClient({
@@ -21,7 +22,7 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
 
   async function getUserNFTData()
   {
-    const activeAccount = account
+    const activeAccount = await account
     console.log(account)
     console.log(currentOffset)
     const userNFTs = await client
@@ -40,24 +41,6 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
     userNFTs && setActiveUserNFTs(prevUserNFTs => [...prevUserNFTs, ...userNFTs.data.activeItems])
   }
 
-  async function getCollectionName(activeNFTAddress)
-  {
-    const collectionName = await client
-      .query({
-        query: gql(GET_COLLECTION_NAME),
-        variables: { activeNFTAddress: activeNFTAddress },
-      })
-      .then(async (data) => {
-        // console.log("Subgraph data: ", data)
-        return data
-      })
-      .catch((err) => {
-        console.log("Error fetching data: ", err)
-      })
-    
-    collectionName && setCurrentCollectionName(collectionName.data.collectionFounds[0].name)
-  }
-
   function handleGridScroll({ currentTarget })
   {
     if(currentTarget.clientHeight + currentTarget.scrollTop + 1 >= currentTarget.scrollHeight)
@@ -66,6 +49,7 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
       console.log("here")
     }
   }
+
 
   useEffect(()=>
   {
@@ -90,24 +74,18 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
         <div className={isConnected ? styles["apio__updateListing--grid"] : styles["apio__updateListing--notConnected"]} onScroll={handleGridScroll}>
           {!activeUserNFTs ? <p>Loading...</p> : activeUserNFTs.length == 0 ? <h3>You have no active listings.</h3> : activeUserNFTs.map((NFT, index)=>{
             const { price, tokenId, nftAddress, seller } = NFT
-            getTokenURI(nftAddress, tokenId)
-            {/* getTokenURI(nftAddress, "0", true) */}
-            getCollectionName(nftAddress)
             return (
               <NFTCard
                 key={index}
                 price={price}
                 nftAddress={nftAddress}
-                name={tokenName}
-                description={tokenDescription}
-                imageURI={imageURI}
                 tokenId={tokenId}
                 seller={seller}
                 account={account}
                 chainId={chainId}
                 signer={signer}
                 type={"userListing"}
-                collectionName={currentCollectionName}
+                isConnected={isConnected}
               />
             )
           })}

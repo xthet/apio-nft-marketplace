@@ -3,22 +3,60 @@ import styles from "./NFTCard.module.css"
 import { useRouter } from "next/router"
 import networkMapping from "../../constants/networkMapping.json"
 import marketplaceABI from "../../constants/NFTMarketplace.json"
+import { GET_COLLECTION } from "../../constants/subGraphQueries"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useState } from "react"
-import { ethers } from "ethers"
+import { useEffect, useState } from "react"
+import { ethers, BigNumber } from "ethers"
 import { truncateStr } from "../../utils/truncateStr"
 import { useNotification } from "../../utils/NotificationProvider"
+import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
+import getABI from "../../utils/getABI"
 
 
-export default function NFTCard({ price, nftAddress, name, imageURI, tokenId, seller, account, signer, chainId, type, collectionName })
+export default function NFTCard({ price, nftAddress, tokenId, seller, account, signer, chainId, type, isConnected })
 {
   const [collectNFT, setCollectNFT] = useState(false)
   const [newPrice, setNewPrice] = useState(null)
+  const [collectionName, setCollectionName] = useState(undefined)
+  const [tokenName, setTokenName] = useState("")
+  const [tokenDescription, setTokenDescription] = useState("")   
+  const [imageURI, setImageURI] = useState("")
+  const [collectionImageURI, setCollectionImageURI] = useState("") 
+  
   const router = useRouter()
   const dispatch = useNotification()
+  // const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
+
 
   const marketplaceAddress = networkMapping[chainId]["NFTMarketplace"][0]
-  // console.log(price)
+
+ 
+  const client = new ApolloClient({
+    uri: process.env.NEXT_PUBLIC_SUBGRAPH_URI,
+    cache: new InMemoryCache(),
+  })
+
+  
+  async function getNFTData()
+  {
+    const activeNFTAddress = await nftAddress
+    const collectionData = await client
+      .query({
+        query: gql(GET_COLLECTION),
+        variables: { activeNFTAddress: activeNFTAddress },
+      })
+      .then(async (data) => {
+        console.log("Subgraph data: ", data)
+        return data
+      })
+      .catch((err) => {
+        console.log("Error fetching data: ", err)
+      })
+
+    collectionData && setCollectionName(collectionData.data.collectionFounds[0].name)
+    getTokenURI(nftAddress, tokenId)
+  }
+
 
   async function buyNFT()
   {
@@ -90,21 +128,51 @@ export default function NFTCard({ price, nftAddress, name, imageURI, tokenId, se
     }
   }
 
-  // useEffect(()=>{return(<NFTCard/>)},[tokenId, dispatch])
+  async function getTokenURI(nftAddress, tokenId, collectionType = false)
+  {
+    if (typeof window.ethereum !== "undefined")
+    {
+      try{
+        const nftABI = await getABI(nftAddress)
+        const NFTContract = new ethers.Contract(nftAddress, nftABI, signer)
+        const tokenURI = await NFTContract.tokenURI(tokenId)
+        collectionType ? await mutateURI(tokenURI, true) : await mutateURI(tokenURI)
+      }catch(e){console.log(e)}
+    }
 
+    async function mutateURI(tokenURI, collectionType = false)
+    {
+      const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/") // switching to https
+      const tokenURIResponse = await (await fetch(requestURL)).json() 
+      const imageURI = tokenURIResponse.image
+      const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
+      !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
+      console.log(imageURI)
+      setTokenName(tokenURIResponse.name)
+      setTokenDescription(tokenURIResponse.description)
+    }
+  }
+
+  useEffect(()=>{
+    async function setUpCard()
+    {
+      await getNFTData()
+    }
+    isConnected && setUpCard()
+  }, [isConnected, imageURI, tokenName])
 
   return (
     <div className={styles["apio__NFTCard"]} onMouseEnter={()=>{setCollectNFT(true)}} onMouseLeave={()=>{setCollectNFT(false)}}>
       <div className={styles["apio__NFTCard--image"]}>
-        <div className={styles["nimg"]}><Image loader={()=>imageURI} src={imageURI} alt="example" layout="fill" objectFit="cover"/></div>
+        { imageURI && <div className={styles["nimg"]}><Image loader={()=>imageURI} src={imageURI} alt="example" layout="fill" objectFit="cover"/></div>}
       </div>
       <div className={styles["apio__NFTCard--text"]}>
         { type !== "userListing"
           ?
-          <h3 className={styles["apio__NFTCard--text--name"]}>{`${name} #0${tokenId}`}</h3>
+          <h3 className={styles["apio__NFTCard--text--name"]}>{`${tokenName} #0${tokenId}`}</h3>
           :
           <div className={styles["apio__NFTCard--text--user_options"]}>
-            <h3 className={styles["apio__NFTCard--text--user_options--name"]}>{`${name} #0${tokenId}`}</h3>
+            <h3 className={styles["apio__NFTCard--text--user_options--name"]}>{`${tokenName} #0${tokenId}`}</h3>
             <button className={styles["apio__NFTCard--removeNFT"]} onClick={handleRemoveNFT}><p>Remove NFT</p></button>
           </div>
         }
@@ -135,6 +203,5 @@ export default function NFTCard({ price, nftAddress, name, imageURI, tokenId, se
         }
       </div>
     </div>
-
   )
 }

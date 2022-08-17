@@ -10,4 +10,4 @@ function truncateStr(fullStr, strLen)
   return charsToDisplay
 }
 
-module.exports = { truncateStr }
+export { truncateStr }

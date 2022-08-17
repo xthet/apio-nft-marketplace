@@ -1,29 +1,51 @@
 import Image from "next/image"
 import Link from "next/link"
 import styles from "./Header.module.css"
+import { ethers, BigNumber } from "ethers"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { truncateStr } from "../../utils/truncateStr"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
 import { GET_COLLECTIONS, GET_FLOOR_NFT } from "../../constants/subGraphQueries"
 import useTokenURI from "../../utils/useTokenURI"
+import { selectionSetMatchesResult } from "@apollo/client/cache/inmemory/helpers"
+import { useEffect, useState } from "react"
+import getABI from "../../utils/getABI"
+
 
 
 export default function Header({ connect, isConnected, account, signer })
 {
-  const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
+  // const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
+  const[name, setName] = useState("")
+  const[nftAddress, setNftAddress] = useState("")
+  const [tokenName, setTokenName] = useState("")
+  const [tokenDescription, setTokenDescription] = useState("")   
+  const [imageURI, setImageURI] = useState("")
+  const [collectionImageURI, setCollectionImageURI] = useState("") 
   
   const { loading: collLoading, error: collError, data: collections } = useQuery(GET_COLLECTIONS)
 
+  useEffect(()=>{
+    async function runHeader()
+    {
+      console.log(collections)
+      const rand = Math.floor(Math.random() * collections.collectionFounds.length)
+      const { name, smybol, nftAddress } = collections.collectionFounds[rand]
+      await getTokenURI(nftAddress, "0", true)
+      setNftAddress(nftAddress)
+      setName(name)
+    }
+
+    collections && runHeader()
+  },[isConnected, collections])
+
+
   function HeaderImage()
   {
-    console.log(collections)
-    const rand = Math.floor(Math.random() * collections.collectionFounds.length)
-    const { name, smybol, nftAddress } = collections.collectionFounds[rand]
-    getTokenURI(nftAddress, "0", true)
     return (
       <div className={styles["apio__header--image_container--image_frame"]}>
         <div className={styles["apio__header--image_container--image"]}>
-          <div className={styles["nimg"]}>{<Image loader={()=>collectionImageURI} src={collectionImageURI} alt="headerNFT" layout="fill" objectFit="cover"/>}</div>
+          {collectionImageURI && <div className={styles["nimg"]}>{<Image loader={()=>collectionImageURI} src={collectionImageURI} alt="headerNFT" layout="fill" objectFit="cover"/>}</div>}
         </div>
         <div className={styles["apio__header--image_container--separator"]}></div>
         <div className={styles["apio__header--image_container--text"]}>
@@ -36,6 +58,31 @@ export default function Header({ connect, isConnected, account, signer })
     )
   }
 
+
+  async function getTokenURI(nftAddress, tokenId, collectionType = false)
+  {
+    if (typeof window.ethereum !== "undefined")
+    {
+      try{
+        const nftABI = await getABI(nftAddress)
+        const NFTContract = new ethers.Contract(nftAddress, nftABI, signer)
+        const tokenURI = await NFTContract.tokenURI(tokenId)
+        collectionType ? await mutateURI(tokenURI, true) : await mutateURI(tokenURI)
+      }catch(e){console.log(e)}
+    }
+
+    async function mutateURI(tokenURI, collectionType = false)
+    {
+      const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/") // switching to https
+      const tokenURIResponse = await (await fetch(requestURL)).json() 
+      const imageURI = tokenURIResponse.image
+      const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
+      !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
+      console.log(imageURI)
+      setTokenName(tokenURIResponse.name)
+      setTokenDescription(tokenURIResponse.description)
+    }
+  }
 
   return (
     <div className={`section__padding ${styles["apio__header"]}`} id="header">

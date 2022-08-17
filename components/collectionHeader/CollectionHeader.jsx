@@ -1,10 +1,102 @@
 import Image from "next/image"
 import { truncateStr } from "../../utils/truncateStr"
-import { ethers } from "ethers"
+import { ethers, BigNumber } from "ethers"
+import { useState, useEffect } from "react"
+import { GET_FLOOR_NFT, GET_COLLECTION } from "../../constants/subGraphQueries"
+import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
+import useTokenURI from "../../utils/useTokenURI"
+import getABI from "../../utils/getABI"
 import styles from "./CollectionHeader.module.css"
 
-export default function CollectionHeader({ name, address, floorPrice, imageURI })
+export default function CollectionHeader({ name, address, isConnected, signer })
 {
+  const [collectCollection, setCollectCollection] = useState(false)
+  const [collectionName, setCollectionName] = useState(undefined)
+  // const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
+  const [tokenName, setTokenName] = useState("")
+  const [tokenDescription, setTokenDescription] = useState("")   
+  const [imageURI, setImageURI] = useState("")
+  const [collectionImageURI, setCollectionImageURI] = useState("")  
+  const [floorPrice, setFloorPrice] = useState(BigNumber.from("0"))
+
+  async function getFloorNFT(nftAddress)
+  {
+    const client = new ApolloClient({
+      uri: process.env.NEXT_PUBLIC_SUBGRAPH_URI,
+      cache: new InMemoryCache(),
+    })
+
+    const collectionData = await client
+      .query({
+        query: gql(GET_COLLECTION),
+        variables: { activeNFTAddress: nftAddress },
+      })
+      .then(async (data) => {
+        console.log("Subgraph data: ", data)
+        return data
+      })
+      .catch((err) => {
+        console.log("Error fetching data: ", err)
+      })
+
+    setCollectionName(collectionData.data.collectionFounds[0].name)
+
+    const floorNFT = await client
+      .query({
+        query: gql(GET_FLOOR_NFT),
+        variables: { activeNFTAddress: nftAddress },
+      })
+      .then(async (data) => {
+        // console.log("Subgraph data: ", data)
+        const floorPrice = await data.data.activeItems[0].price
+        const floorTokenId = await data.data.activeItems[0].tokenId
+        return { floorPrice: floorPrice, floorTokenId: floorTokenId }
+      })
+      .catch((err) => {
+        console.log("Error fetching data: ", err)
+      })
+    
+    if(floorNFT)
+    {
+      console.log(floorNFT.floorPrice)
+      
+      setFloorPrice(floorNFT.floorPrice)
+    }
+    getTokenURI(address, "0")
+  }
+
+
+  async function getTokenURI(nftAddress, tokenId, collectionType = false)
+  {
+    if (typeof window.ethereum !== "undefined")
+    {
+      try{
+        const nftABI = await getABI(nftAddress)
+        const NFTContract = new ethers.Contract(nftAddress, nftABI, signer)
+        const tokenURI = await NFTContract.tokenURI(tokenId)
+        collectionType ? await mutateURI(tokenURI, true) : await mutateURI(tokenURI)
+      }catch(e){console.log(e)}
+    }
+
+    async function mutateURI(tokenURI, collectionType = false)
+    {
+      const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/") // switching to https
+      const tokenURIResponse = await (await fetch(requestURL)).json() 
+      const imageURI = tokenURIResponse.image
+      const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
+      !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
+      console.log(imageURI, "here")
+      setTokenName(tokenURIResponse.name)
+      setTokenDescription(tokenURIResponse.description)
+    }
+  }
+
+  useEffect(()=>{
+    isConnected && address && getFloorNFT(address)
+  }, [isConnected])
+
+
+
   return (
     <div className={styles["apio__collectionHeader"]}>
       <div className={styles["apio__collectionHeader--image_container"]}>
@@ -14,7 +106,7 @@ export default function CollectionHeader({ name, address, floorPrice, imageURI }
           </div>
           <div className={styles["apio__collectionHeader--image_container--separator"]}></div>
           <div className={styles["apio__collectionHeader--image_container--text"]}>
-            <h3>{name}</h3>
+            <h3>{collectionName}</h3>
             <a href={`https://rinkeby.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
               <p>@{truncateStr(address || "", 12)}</p>
             </a>

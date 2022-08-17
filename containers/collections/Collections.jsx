@@ -1,11 +1,13 @@
-import styles from "./Collections.module.css"
-import { GET_DROP_COLLECTIONS, GET_FLOOR_NFT } from "../../constants/subGraphQueries"
+import { GET_DROP_COLLECTIONS, GET_FLOOR_NFT, GET_FOUR_COLLECTIONS } from "../../constants/subGraphQueries"
 import { CollectionCard } from "../../components/exportComps"
 import { BigNumber, ethers } from "ethers"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
 import { useCallback, useEffect, useState } from "react"
 import { useNotification } from "../../utils/NotificationProvider"
+import Link from "next/link"
 import useTokenURI from "../../utils/useTokenURI"
+import styles from "./Collections.module.css"
+
 
 export default function Collections({ connect, isConnected, chainId, signer, type })
 {
@@ -14,7 +16,6 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
   const [collections, setCollections] = useState([])
   const [currentOffset, setCurrentOffset] = useState(0)
   const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
-
   const dispatch = useNotification()
 
   // const { loading: collLoading, error: collError, data: collections } = useQuery(GET_COLLECTIONS)
@@ -22,6 +23,23 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     uri: process.env.NEXT_PUBLIC_SUBGRAPH_URI,
     cache: new InMemoryCache(),
   })
+
+  async function getHomeCollections()
+  {
+    const homeCollections = await client
+      .query({
+        query: gql(GET_FOUR_COLLECTIONS)
+      })
+      .then(async (data) => {
+        console.log("Subgraph data: ", data)
+        return data
+      })
+      .catch((err) => {
+        console.log("Error fetching data: ", err)
+      })
+    
+    homeCollections && setCollections(homeCollections.data.collectionFounds)
+  }
 
   async function getCollections()
   {
@@ -31,36 +49,14 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         variables: { offset: currentOffset },
       })
       .then(async (data) => {
-        console.log("Subgraph data: ", data)
+        // console.log("Subgraph data: ", data)
         return data
       })
       .catch((err) => {
         console.log("Error fetching data: ", err)
       })
-    setCollections(prev => [...prev, ...foundCollections.data.collectionFounds])
-  }
-
-  async function getFloorNFT(nftAddress)
-  {
-    const [floorPrice, floorTokenId] = await client
-      .query({
-        query: gql(GET_FLOOR_NFT),
-        variables: { activeNFTAddress: nftAddress },
-      })
-      .then(async (data) => {
-        // console.log("Subgraph data: ", data)
-        const floorPrice = await data.data.activeItems[0].price
-        const floorTokenId = await data.data.activeItems[0].tokenId
-        return [floorPrice, floorTokenId]
-      })
-      .catch((err) => {
-        console.log("Error fetching data: ", err)
-      })
-
-    setCardPrice(floorPrice)
-    setCardTokenId(floorTokenId)
-    // console.log(floorPrice, floorTokenId)
-    // return [floorPrice, floorTokenId]
+    
+    foundCollections && setCollections(prev => [...prev, ...foundCollections.data.collectionFounds])
   }
 
   function handleGridScroll({ currentTarget })
@@ -68,13 +64,24 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     if(currentTarget.clientHeight + currentTarget.scrollTop + 1 >= currentTarget.scrollHeight)
     {
       setCurrentOffset(prev => prev + 5)
-      console.log("here")
+      // console.log("here")
     }
   }
 
   useEffect(()=>{
-    isConnected && getCollections()
-  },[isConnected, currentOffset])
+    async function runQueries()
+    {
+      if(type == "home"){
+        await getHomeCollections()
+      }
+      else if (type == "collections")
+      {
+        await getCollections()
+      }
+    }
+
+    isConnected && runQueries()
+  },[isConnected])
 
   return (
     <div className={`section__padding ${styles["apio__collections"]}`} id={type == "home" ? "drops" : "collections"}>
@@ -97,24 +104,18 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
 
       <div className={styles["apio__collections--grid_container"]}>
         <div className={isConnected ? styles["apio__collections--grid"] : styles["apio__collections--notConnected"]} onScroll={handleGridScroll}>
-          {collections.length == 0 || !collections ? <p> </p> :
+          {!collections ? <p> </p> :
             collections.map((collection, index)=>{
               const { name, symbol, nftAddress } = collection
-              getFloorNFT(nftAddress)
-              {/* console.log(nftAddress, cardPrice, cardTokenId) */}
-              getTokenURI(nftAddress, cardTokenId)
-              return (
-                <CollectionCard
-                  key={index}
-                  imageURI={imageURI}
-                  name={name}
-                  address={nftAddress}
-                  floorPrice={cardPrice}
-                />
-              )
+              return <CollectionCard key={index} address={nftAddress} name={name} isConnected={isConnected} signer={signer}/>
             })}
         </div>
       </div>
+
+      {type == "home" && 
+      <div className={styles["apio__collections--see_more"]}>
+        <Link href="/explore"><div><button className={styles["apio__collections--see_more_btn"]}>See More...</button></div></Link>
+      </div>}
     </div>
   )
 }

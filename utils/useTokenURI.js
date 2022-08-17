@@ -24,8 +24,6 @@ export default function useTokenURI()
         const tokenURI = await NFTContract.tokenURI(tokenId)
         collectionType ? await mutateURI(tokenURI, true) : await mutateURI(tokenURI)
       }catch(e){console.log(e)}
-
-      // setActiveABI(nftABI)
     }
 
     async function mutateURI(tokenURI, collectionType = false)
@@ -34,10 +32,10 @@ export default function useTokenURI()
       const tokenURIResponse = await (await fetch(requestURL)).json() 
       const imageURI = tokenURIResponse.image
       const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
-      !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL) 
+      !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
+      console.log(imageURI)
       setTokenName(tokenURIResponse.name)
       setTokenDescription(tokenURIResponse.description)
-      return true
     }
   }
 
