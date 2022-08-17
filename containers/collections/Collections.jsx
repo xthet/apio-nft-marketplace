@@ -112,7 +112,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         </div>
       </div>
 
-      {type == "home" && 
+      {type == "home" && isConnected &&
       <div className={styles["apio__collections--see_more"]}>
         <Link href="/explore"><div><button className={styles["apio__collections--see_more_btn"]}>See More...</button></div></Link>
       </div>}
