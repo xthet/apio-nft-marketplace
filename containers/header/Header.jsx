@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { truncateStr } from "../../utils/truncateStr"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
 import { GET_COLLECTIONS, GET_FLOOR_NFT } from "../../constants/subGraphQueries"
-import useTokenURI from "../../utils/useTokenURI"
-import { selectionSetMatchesResult } from "@apollo/client/cache/inmemory/helpers"
 import { useEffect, useState } from "react"
 import getABI from "../../utils/getABI"
 
@@ -18,6 +16,7 @@ export default function Header({ connect, isConnected, account, signer })
   // const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
   const[name, setName] = useState("")
   const[nftAddress, setNftAddress] = useState("")
+  const [loaded, setLoaded] = useState(false)
   const [tokenName, setTokenName] = useState("")
   const [tokenDescription, setTokenDescription] = useState("")   
   const [imageURI, setImageURI] = useState("")
@@ -36,8 +35,8 @@ export default function Header({ connect, isConnected, account, signer })
       setName(name)
     }
 
-    collections && runHeader()
-  },[isConnected, collections])
+    !loaded && collections && runHeader()
+  },[isConnected, collections, loaded])
 
 
   function HeaderImage()
@@ -45,7 +44,7 @@ export default function Header({ connect, isConnected, account, signer })
     return (
       <div className={styles["apio__header--image_container--image_frame"]}>
         <div className={styles["apio__header--image_container--image"]}>
-          {collectionImageURI && <div className={styles["nimg"]}>{<Image loader={()=>collectionImageURI} src={collectionImageURI} alt="headerNFT" layout="fill" objectFit="cover"/>}</div>}
+          {collectionImageURI && <div className={styles["nimg"]}>{<Image onLoad={()=>{setLoaded(true)}} loader={()=>collectionImageURI} src={collectionImageURI} alt="headerNFT" layout="fill" objectFit="cover"/>}</div>}
         </div>
         <div className={styles["apio__header--image_container--separator"]}></div>
         <div className={styles["apio__header--image_container--text"]}>

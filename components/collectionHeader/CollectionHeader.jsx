@@ -11,6 +11,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
 {
   const [collectCollection, setCollectCollection] = useState(false)
   const [collectionName, setCollectionName] = useState(undefined)
+  const [loaded, setLoaded] = useState(false)
   const [tokenName, setTokenName] = useState("")
   const [tokenDescription, setTokenDescription] = useState("")   
   const [imageURI, setImageURI] = useState("")
@@ -90,8 +91,8 @@ export default function CollectionHeader({ name, address, isConnected, signer })
   }
 
   useEffect(()=>{
-    isConnected && address && getFloorNFT(address)
-  }, [isConnected])
+    isConnected && !loaded && address && getFloorNFT(address)
+  }, [isConnected, loaded])
 
 
 
@@ -100,7 +101,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
       <div className={styles["apio__collectionHeader--image_container"]}>
         <div className={styles["apio__collectionHeader--image_container--image_frame"]}>
           <div className={styles["apio__collectionHeader--image_container--image"]}>
-            <div className={styles["nimg"]}><Image loader={()=>imageURI} src={imageURI} alt="collectionimg" layout="fill" objectFit="cover"/></div>
+            <div className={styles["nimg"]}><Image onLoad={()=>{setLoaded(true)}} loader={()=>imageURI} src={imageURI} alt="collectionimg" layout="fill" objectFit="cover"/></div>
           </div>
           <div className={styles["apio__collectionHeader--image_container--separator"]}></div>
           <div className={styles["apio__collectionHeader--image_container--text"]}>
