@@ -13,6 +13,7 @@ import getABI from "../../utils/getABI"
 export default function CollectionCard({ name, address, isConnected, signer })
 {
   const [collectCollection, setCollectCollection] = useState(false)
+  const [loaded, setLoaded] = useState(false)
   const [floorPrice, setFloorPrice] = useState(BigNumber.from("0"))
   const [tokenName, setTokenName] = useState("")
   const [tokenDescription, setTokenDescription] = useState("")   
@@ -76,15 +77,15 @@ export default function CollectionCard({ name, address, isConnected, signer })
 
   useEffect(()=>{
     isConnected && getFloorNFT(address)
-    !imageURI && getFloorNFT(address)
-  },[isConnected, imageURI, name])
+    !loaded && !imageURI && getFloorNFT(address)
+  },[isConnected, imageURI, name, loaded])
 
 
   return (
     <div className={styles["apio__collectionCard"]} onMouseEnter={()=>{setCollectCollection(true)}} onMouseLeave={()=>{setCollectCollection(false)}}>
       <div className={styles["apio__collectionCard--image"]}>
         {/* {console.log(imageURI)} */}
-        {imageURI && <div className={styles["nimg"]}><Image loader={()=>imageURI} src={imageURI} alt="NFT" layout="fill" objectFit="cover"/></div>}
+        {imageURI && <div className={styles["nimg"]}><Image onLoad={()=>{setLoaded(true)}} loader={()=>imageURI} src={imageURI} alt="NFT" layout="fill" objectFit="cover"/></div>}
       </div>
       <div className={styles["apio__collectionCard--text"]}>
         <h3 className={styles["apio__collectionCard--text--name"]}>{`${name}` || <p></p>} </h3>

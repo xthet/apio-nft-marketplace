@@ -19,6 +19,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
   const [newPrice, setNewPrice] = useState(null)
   const [collectionName, setCollectionName] = useState(undefined)
   const [tokenName, setTokenName] = useState("")
+  const [loaded, setLoaded] = useState(false)
   const [tokenDescription, setTokenDescription] = useState("")   
   const [imageURI, setImageURI] = useState("")
   const [collectionImageURI, setCollectionImageURI] = useState("") 
@@ -54,7 +55,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
       })
 
     collectionData && setCollectionName(collectionData.data.collectionFounds[0].name)
-    getTokenURI(nftAddress, tokenId)
+    !loaded && getTokenURI(nftAddress, tokenId)
   }
 
 
@@ -158,13 +159,13 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
     {
       await getNFTData()
     }
-    isConnected && setUpCard()
-  }, [isConnected, imageURI, tokenName])
+    isConnected && !loaded && setUpCard()
+  }, [isConnected, imageURI, tokenName, loaded])
 
   return (
     <div className={styles["apio__NFTCard"]} onMouseEnter={()=>{setCollectNFT(true)}} onMouseLeave={()=>{setCollectNFT(false)}}>
       <div className={styles["apio__NFTCard--image"]}>
-        { imageURI && <div className={styles["nimg"]}><Image loader={()=>imageURI} src={imageURI} alt="example" layout="fill" objectFit="cover"/></div>}
+        { imageURI && <div className={styles["nimg"]}><Image onLoad={()=>{setLoaded(true)}} loader={()=>imageURI} src={imageURI} alt="example" layout="fill" objectFit="cover"/></div>}
       </div>
       <div className={styles["apio__NFTCard--text"]}>
         { type !== "userListing"

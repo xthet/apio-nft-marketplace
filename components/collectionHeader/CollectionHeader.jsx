@@ -4,7 +4,6 @@ import { ethers, BigNumber } from "ethers"
 import { useState, useEffect } from "react"
 import { GET_FLOOR_NFT, GET_COLLECTION } from "../../constants/subGraphQueries"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
-import useTokenURI from "../../utils/useTokenURI"
 import getABI from "../../utils/getABI"
 import styles from "./CollectionHeader.module.css"
 
@@ -12,7 +11,6 @@ export default function CollectionHeader({ name, address, isConnected, signer })
 {
   const [collectCollection, setCollectCollection] = useState(false)
   const [collectionName, setCollectionName] = useState(undefined)
-  // const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
   const [tokenName, setTokenName] = useState("")
   const [tokenDescription, setTokenDescription] = useState("")   
   const [imageURI, setImageURI] = useState("")
