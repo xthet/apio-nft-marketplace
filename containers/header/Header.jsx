@@ -35,7 +35,7 @@ export default function Header({ connect, isConnected, account, signer })
       setName(name)
     }
 
-    !loaded && collections && runHeader()
+    collections && runHeader()
   },[isConnected, collections, loaded])
 
 

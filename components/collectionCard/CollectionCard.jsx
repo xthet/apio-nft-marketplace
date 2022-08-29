@@ -77,7 +77,7 @@ export default function CollectionCard({ name, address, isConnected, signer })
 
   useEffect(()=>{
     isConnected && getFloorNFT(address)
-    !loaded && !imageURI && getFloorNFT(address)
+    !imageURI && getFloorNFT(address)
   },[isConnected, imageURI, name, loaded])
 
 
