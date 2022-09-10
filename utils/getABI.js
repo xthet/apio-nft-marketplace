@@ -4,7 +4,10 @@ async function getABI(contractAddress)
   try{
     const abi = await fetch(url).then(res => res.json()).then(data => {return data.result}).catch(e=>console.log(e))
     return abi
-  }catch(e){console.log(e)}
+  }catch(e){
+    console.log(e)
+    getABI(contractAddress)
+  }
 
 }
 

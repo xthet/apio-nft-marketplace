@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "homepage": "./",
   "dependencies": {
     "@apollo/client": "^3.6.9",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
