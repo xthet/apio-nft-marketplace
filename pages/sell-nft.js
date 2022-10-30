@@ -17,7 +17,7 @@ export default function Explore() {
     
       <div>
         <Navbar connect={connect} isConnected={isConnected} signer={signer} account={account}/>
-        <Notice />
+        {/* <Notice /> */}
       </div>
       <NFTVendor connect={connect} isConnected={isConnected} chainId={chainId} signer={signer} account={account}/>
       <UpdateListing connect={connect} isConnected={isConnected} chainId={chainId} signer={signer} account={account}/>

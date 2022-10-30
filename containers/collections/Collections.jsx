@@ -1,4 +1,4 @@
-import { GET_DROP_COLLECTIONS, GET_FLOOR_NFT, GET_FOUR_COLLECTIONS } from "../../constants/subGraphQueries"
+import { GET_DROP_COLLECTIONS, GET_FLOOR_NFT, GET_FOUR_COLLECTIONS, GET_REAL_COLLECTIONS } from "../../constants/subGraphQueries"
 import { CollectionCard } from "../../components/exportComps"
 import { BigNumber, ethers } from "ethers"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
@@ -38,11 +38,40 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         console.log("Error fetching data: ", err)
       })
     
-    homeCollections && setCollections(homeCollections.data.collectionFounds)
+    // homeCollections && setCollections(homeCollections.data.collectionFounds)
+
+    async function getRealCollections(nftAddress)
+    {
+      const realCollections = await client
+        .query({
+          query: gql(GET_REAL_COLLECTIONS),
+          variables: { nftAddress: nftAddress },
+        })
+        .then(async (data) => {
+          console.log("Subgraph data: ", data)
+          return data
+        })
+        .catch((err) => {
+          console.log("Error fetching data: ", err)
+        })
+      return realCollections.data.activeItems
+    }
+
+    const readyCollections = homeCollections.data.collectionFounds
+    // console.log(readyCollections)
+    const mutatedCollections = readyCollections.map(async collection => {
+      const realCollection = await getRealCollections(collection.nftAddress)
+      // console.log(realCollection)
+      if(realCollection.length > 0){
+        setCollections(prev => [...prev, collection])
+      }
+    })
+    // mutatedCollections && setCollections(freeCollections)
   }
 
   async function getCollections()
   {
+    let collArray = []
     const foundCollections = await client
       .query({
         query: gql(GET_DROP_COLLECTIONS),
@@ -56,7 +85,36 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         console.log("Error fetching data: ", err)
       })
     
-    foundCollections && setCollections(prev => [...prev, ...foundCollections.data.collectionFounds])
+    collArray = [...collArray, ...foundCollections.data.collectionFounds]
+
+    async function getRealCollections(nftAddress)
+    {
+      const realCollections = await client
+        .query({
+          query: gql(GET_REAL_COLLECTIONS),
+          variables: { nftAddress: nftAddress },
+        })
+        .then(async (data) => {
+          console.log("Subgraph data: ", data)
+          return data
+        })
+        .catch((err) => {
+          console.log("Error fetching data: ", err)
+        })
+
+      return realCollections.data.activeItems
+    }
+
+    const readyCollections = collArray
+
+    console.log(readyCollections)
+    const mutatedCollections = readyCollections.map(async collection => {
+      const realCollection = await getRealCollections(collection.nftAddress)
+      // console.log(realCollection)
+      if(realCollection.length > 0){
+        setCollections(prev => [...prev, collection])
+      }
+    })
   }
 
   function handleGridScroll({ currentTarget })
@@ -104,11 +162,17 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
 
       <div className={styles["apio__collections--grid_container"]}>
         <div className={isConnected ? styles["apio__collections--grid"] : styles["apio__collections--notConnected"]} onScroll={handleGridScroll}>
-          {!collections ? <p> </p> :
+          {!collections ? <p> </p> : type === "home" ?
+            collections.slice(0,4).map((collection, index)=>{
+              const { name, symbol, nftAddress } = collection
+              return <CollectionCard key={index} address={nftAddress} name={name} isConnected={isConnected} signer={signer}/>
+            })
+            :
             collections.map((collection, index)=>{
               const { name, symbol, nftAddress } = collection
               return <CollectionCard key={index} address={nftAddress} name={name} isConnected={isConnected} signer={signer}/>
-            })}
+            })
+          }
         </div>
       </div>
 

@@ -44,7 +44,7 @@ export default function CollectionCard({ name, address, isConnected, signer })
     
     if(floorNFT)
     {
-      console.log(floorNFT.floorPrice)
+      console.log(`Floor NFT: ${floorNFT.floorPrice}`)
       getTokenURI(address, floorNFT.floorTokenId)
       setFloorPrice(floorNFT.floorPrice)
     }
@@ -69,7 +69,7 @@ export default function CollectionCard({ name, address, isConnected, signer })
       const imageURI = tokenURIResponse.image
       const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
       !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
-      console.log(imageURI)
+      // console.log(imageURI)
       setTokenName(tokenURIResponse.name)
       setTokenDescription(tokenURIResponse.description)
     }
@@ -89,7 +89,7 @@ export default function CollectionCard({ name, address, isConnected, signer })
       </div>
       <div className={styles["apio__collectionCard--text"]}>
         <h3 className={styles["apio__collectionCard--text--name"]}>{`${name}` || <p></p>} </h3>
-        <a href={`https://rinkeby.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
+        <a href={`https://goerli.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
           <p className={styles["apio__collectionCard--creator"]}>@{truncateStr(address || "", 12)}</p>
         </a>
         <div className={styles["apio__collectionCard--text--price"]}>

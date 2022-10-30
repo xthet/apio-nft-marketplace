@@ -22,7 +22,7 @@ export default function Explore() {
     
       <div>
         <Navbar connect={connect} isConnected={isConnected} signer={signer} account={account}/>
-        <Notice />
+        {/* <Notice /> */}
       </div>
 
       {

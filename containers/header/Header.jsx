@@ -27,12 +27,14 @@ export default function Header({ connect, isConnected, account, signer })
   useEffect(()=>{
     async function runHeader()
     {
-      console.log(collections)
-      const rand = Math.floor(Math.random() * collections.collectionFounds.length)
-      const { name, smybol, nftAddress } = collections.collectionFounds[rand]
-      await getTokenURI(nftAddress, "0", true)
-      setNftAddress(nftAddress)
-      setName(name)
+      // console.log(collections)
+      if(collections && collections.collectionFounds.length){ 
+        const rand = Math.floor(Math.random() * collections.collectionFounds.length)
+        const { name, symbol, nftAddress } = collections.collectionFounds[rand]
+        await getTokenURI(nftAddress, "0", true)
+        setNftAddress(nftAddress)
+        setName(name)
+      }
     }
 
     collections && runHeader()
@@ -49,7 +51,7 @@ export default function Header({ connect, isConnected, account, signer })
         <div className={styles["apio__header--image_container--separator"]}></div>
         <div className={styles["apio__header--image_container--text"]}>
           <h3>{name}</h3>
-          <a href={`https://rinkeby.etherscan.io/token/${nftAddress}`} target="_blank" rel="noopener noreferrer">
+          <a href={`https://goerli.etherscan.io/token/${nftAddress}`} target="_blank" rel="noopener noreferrer">
             <p>@{truncateStr(nftAddress || "", 12)}</p>
           </a>
         </div>
@@ -77,7 +79,7 @@ export default function Header({ connect, isConnected, account, signer })
       const imageURI = tokenURIResponse.image
       const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
       !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
-      console.log(imageURI)
+      // console.log(imageURI)
       setTokenName(tokenURIResponse.name)
       setTokenDescription(tokenURIResponse.description)
     }

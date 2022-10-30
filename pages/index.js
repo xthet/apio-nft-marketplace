@@ -20,7 +20,7 @@ export default function Home() {
     
       <div>
         <Navbar connect={connect} isConnected={isConnected} account={account} signer={signer}/>
-        <Notice />
+        {/* <Notice /> */}
         <Header connect={connect} isConnected={isConnected} account={account} signer={signer}/>
       </div>
 

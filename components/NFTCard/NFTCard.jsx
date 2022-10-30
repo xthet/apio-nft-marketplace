@@ -16,7 +16,7 @@ import getABI from "../../utils/getABI"
 export default function NFTCard({ price, nftAddress, tokenId, seller, account, signer, chainId, type, isConnected })
 {
   const [collectNFT, setCollectNFT] = useState(false)
-  const [newPrice, setNewPrice] = useState(null)
+  const [newPrice, setNewPrice] = useState(0)
   const [collectionName, setCollectionName] = useState(undefined)
   const [tokenName, setTokenName] = useState("")
   const [loaded, setLoaded] = useState(false)
@@ -29,7 +29,8 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
   // const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
 
 
-  const marketplaceAddress = networkMapping[chainId]["NFTMarketplace"][0]
+  const marketplace = networkMapping[chainId]["NFTMarketplace"]
+  const marketplaceAddress = marketplace[marketplace.length - 1]
 
  
   const client = new ApolloClient({
@@ -47,7 +48,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
         variables: { activeNFTAddress: activeNFTAddress },
       })
       .then(async (data) => {
-        console.log("Subgraph data: ", data)
+        // console.log("Subgraph data: ", data)
         return data
       })
       .catch((err) => {
@@ -148,7 +149,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
       const imageURI = tokenURIResponse.image
       const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
       !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
-      console.log(imageURI)
+      // console.log(imageURI)
       setTokenName(tokenURIResponse.name)
       setTokenDescription(tokenURIResponse.description)
     }

@@ -14,7 +14,8 @@ export default function NFTVendor({ connect, isConnected, chainId, signer, accou
   const [price, setPrice] = useState("")
   const [listedSuccessfully, setListedSuccessfully] = useState(false)
   const [earnings, setEarnings] = useState("0")
-  const marketplaceAddress = networkMapping[chainId]["NFTMarketplace"][0]
+  const marketplace = networkMapping[chainId]["NFTMarketplace"]
+  const marketplaceAddress = marketplace[marketplace.length - 1]
   const dispatch = useNotification()
 
   async function approveAndList()

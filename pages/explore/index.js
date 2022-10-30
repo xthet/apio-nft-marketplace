@@ -19,7 +19,7 @@ export default function Explore() {
     
       <div>
         <Navbar connect={connect} isConnected={isConnected} account={account} signer={signer}/>
-        <Notice />
+        {/* <Notice /> */}
       </div>
 
       <Collections connect={connect} isConnected={isConnected} chainId={chainId} signer={signer} type="collections"/>

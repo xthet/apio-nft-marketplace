@@ -42,11 +42,11 @@ export default function useConnection()
           const provider = new ethers.providers.Web3Provider(window.ethereum)
           setSigner(provider.getSigner())
           const { chainId } = await provider.getNetwork()
-          if(chainId !== "4")
+          if(chainId !== "5")
           {
             await ethereum.request({
               method: "wallet_switchEthereumChain",
-              params: [{ chainId: "0x4" }],
+              params: [{ chainId: "0x5" }],
             })
             console.log("You have switched to the right network")
           }

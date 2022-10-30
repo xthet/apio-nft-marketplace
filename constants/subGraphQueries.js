@@ -20,9 +20,17 @@ const GET_DROP_COLLECTIONS = `
   }
 `
 
+const GET_REAL_COLLECTIONS = `
+  query getRealCollections($nftAddress: String!){
+    activeItems(where:{nftAddress: $nftAddress}){
+      tokenId
+    }
+  }
+`
+
 const GET_FOUR_COLLECTIONS = `
   query getCollections{
-    collectionFounds(first: 4, orderBy: createdAt, orderDirection: desc) {
+    collectionFounds(first: 10, orderBy: createdAt, orderDirection: desc) {
       name
       symbol
       nftAddress
@@ -81,4 +89,4 @@ const GET_COLLECTION_NAME = `
   }
 `
 
-export { GET_COLLECTIONS, GET_FLOOR_NFT, GET_NFTS, GET_COLLECTION, GET_USER_LISTINGS, GET_COLLECTION_NAME, GET_DROP_COLLECTIONS, GET_FOUR_COLLECTIONS }
+export { GET_REAL_COLLECTIONS, GET_COLLECTIONS, GET_FLOOR_NFT, GET_NFTS, GET_COLLECTION, GET_USER_LISTINGS, GET_COLLECTION_NAME, GET_DROP_COLLECTIONS, GET_FOUR_COLLECTIONS }
