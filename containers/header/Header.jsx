@@ -5,7 +5,7 @@ import { ethers, BigNumber } from "ethers"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { truncateStr } from "../../utils/truncateStr"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
-import { GET_COLLECTIONS, GET_FLOOR_NFT } from "../../constants/subGraphQueries"
+import { GET_DROP_COLLECTIONS, GET_FLOOR_NFT, GET_FOUR_COLLECTIONS, GET_REAL_COLLECTIONS } from "../../constants/subGraphQueries"
 import { useEffect, useState } from "react"
 import getABI from "../../utils/getABI"
 
@@ -21,16 +21,64 @@ export default function Header({ connect, isConnected, account, signer })
   const [tokenDescription, setTokenDescription] = useState("")   
   const [imageURI, setImageURI] = useState("")
   const [collectionImageURI, setCollectionImageURI] = useState("") 
+  const [collections, setCollections] = useState([])
+
   
-  const { loading: collLoading, error: collError, data: collections } = useQuery(GET_COLLECTIONS)
+  // const { loading: collLoading, error: collError, data: collections } = useQuery(GET_COLLECTIONS)
+  const client = new ApolloClient({
+    uri: process.env.NEXT_PUBLIC_SUBGRAPH_URI,
+    cache: new InMemoryCache(),
+  })
+
+  async function getHomeCollections()
+  {
+    const homeCollections = await client
+      .query({
+        query: gql(GET_FOUR_COLLECTIONS)
+      })
+      .then(async (data) => {
+        console.log("Subgraph data: ", data)
+        return data
+      })
+      .catch((err) => {
+        console.log("Error fetching data: ", err)
+      })
+    
+    async function getRealCollections(nftAddress)
+    {
+      const realCollections = await client
+        .query({
+          query: gql(GET_REAL_COLLECTIONS),
+          variables: { nftAddress: nftAddress },
+        })
+        .then(async (data) => {
+          console.log("Subgraph data: ", data)
+          return data
+        })
+        .catch((err) => {
+          console.log("Error fetching data: ", err)
+        })
+      return realCollections.data.activeItems
+    }
+
+    const readyCollections = homeCollections.data.collectionFounds
+    const mutatedCollections = readyCollections.map(async collection => {
+      const realCollection = await getRealCollections(collection.nftAddress)
+      if(realCollection.length > 0){
+        setCollections(prev => [...prev, collection])
+      }
+    })
+    // mutatedCollections && setCollections(freeCollections)
+  }
+
 
   useEffect(()=>{
     async function runHeader()
     {
       // console.log(collections)
-      if(collections && collections.collectionFounds.length){ 
-        const rand = Math.floor(Math.random() * collections.collectionFounds.length)
-        const { name, symbol, nftAddress } = collections.collectionFounds[rand]
+      if(collections.length){ 
+        const rand = Math.floor(Math.random() * collections.length)
+        const { name, symbol, nftAddress } = collections[rand]
         await getTokenURI(nftAddress, "0", true)
         setNftAddress(nftAddress)
         setName(name)
@@ -39,6 +87,15 @@ export default function Header({ connect, isConnected, account, signer })
 
     collections && runHeader()
   },[isConnected, collections, loaded])
+
+  useEffect(()=>{
+    async function runQueries()
+    {
+      await getHomeCollections()
+    }
+
+    isConnected && runQueries()
+  },[isConnected])
 
 
   function HeaderImage()
@@ -107,7 +164,7 @@ export default function Header({ connect, isConnected, account, signer })
         </div>
       </div>
       {
-        !isConnected || collLoading || collError || !collections 
+        !isConnected || !collections 
           ? <p>Loading</p> 
           : 
           <div className={styles["apio__header--image_container"]}>
