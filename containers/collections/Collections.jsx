@@ -31,7 +31,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         query: gql(GET_FOUR_COLLECTIONS)
       })
       .then(async (data) => {
-        console.log("Subgraph data: ", data)
+        // console.log("Subgraph data: ", data)
         return data
       })
       .catch((err) => {
@@ -48,7 +48,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
           variables: { nftAddress: nftAddress },
         })
         .then(async (data) => {
-          console.log("Subgraph data: ", data)
+          // console.log("Subgraph data: ", data)
           return data
         })
         .catch((err) => {
@@ -58,7 +58,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     }
 
     const readyCollections = homeCollections.data.collectionFounds
-    // console.log(readyCollections)
+    // console.log(homeCollections)
     const mutatedCollections = readyCollections.map(async collection => {
       const realCollection = await getRealCollections(collection.nftAddress)
       // console.log(realCollection)

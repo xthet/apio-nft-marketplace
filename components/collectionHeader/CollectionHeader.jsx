@@ -31,7 +31,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
         variables: { activeNFTAddress: nftAddress },
       })
       .then(async (data) => {
-        console.log("Subgraph data: ", data)
+        // console.log("Subgraph data: ", data)
         return data
       })
       .catch((err) => {

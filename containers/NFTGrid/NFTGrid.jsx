@@ -45,7 +45,7 @@ export default function NFTGrid({ connect, isConnected, chainId, signer, address
       if(currentTarget.clientHeight !== currentTarget.scrollHeight)
       {
         setCurrentOffset(prev => prev + 5)
-        console.log("here")
+        // console.log("here")
       }
     }
   }

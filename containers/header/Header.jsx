@@ -37,7 +37,7 @@ export default function Header({ connect, isConnected, account, signer })
         query: gql(GET_FOUR_COLLECTIONS)
       })
       .then(async (data) => {
-        console.log("Subgraph data: ", data)
+        // console.log("Subgraph data: ", data)
         return data
       })
       .catch((err) => {
@@ -52,7 +52,7 @@ export default function Header({ connect, isConnected, account, signer })
           variables: { nftAddress: nftAddress },
         })
         .then(async (data) => {
-          console.log("Subgraph data: ", data)
+          // console.log("Subgraph data: ", data)
           return data
         })
         .catch((err) => {

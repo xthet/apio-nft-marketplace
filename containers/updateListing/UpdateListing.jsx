@@ -31,13 +31,13 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
         variables: { activeAccount: activeAccount, offset: currentOffset },
       })
       .then(async (data) => {
-        console.log("Subgraph data: ", data)
+        // console.log("Subgraph data: ", data)
         return data
       })
       .catch((err) => {
         console.log("Error fetching data: ", err)
       })
-    console.log(currentOffset)
+    // console.log(currentOffset)
     userNFTs && setActiveUserNFTs(prevUserNFTs => [...prevUserNFTs, ...userNFTs.data.activeItems])
   }
 
@@ -46,7 +46,7 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
     if(currentTarget.clientHeight + currentTarget.scrollTop + 1 >= currentTarget.scrollHeight)
     {
       setCurrentOffset(prev => prev + 5)
-      console.log("here")
+      // console.log("here")
     }
   }
 
@@ -56,7 +56,7 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
     async function runUI()
     {
       await getUserNFTData()
-      console.log("there")
+      // console.log("there")
     }
     isConnected && runUI()
   }, [isConnected, account, currentOffset])

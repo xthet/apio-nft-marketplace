@@ -44,7 +44,7 @@ export default function CollectionCard({ name, address, isConnected, signer })
     
     if(floorNFT)
     {
-      console.log(`Floor NFT: ${floorNFT.floorPrice}`)
+      // console.log(`Floor NFT: ${floorNFT.floorPrice}`)
       getTokenURI(address, floorNFT.floorTokenId)
       setFloorPrice(floorNFT.floorPrice)
     }
