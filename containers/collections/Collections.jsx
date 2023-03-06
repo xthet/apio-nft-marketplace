@@ -64,6 +64,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
       // console.log(realCollection)
       if(realCollection.length > 0){
         setCollections(prev => [...prev, collection])
+      // setCollections(homeCollections.data.collectionFounds)
       }
     })
     // mutatedCollections && setCollections(freeCollections)

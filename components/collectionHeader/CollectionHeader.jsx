@@ -106,7 +106,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
           <div className={styles["apio__collectionHeader--image_container--separator"]}></div>
           <div className={styles["apio__collectionHeader--image_container--text"]}>
             <h3>{collectionName}</h3>
-            <a href={`https://rinkeby.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
+            <a href={`https://goerli.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
               <p>@{truncateStr(address || "", 12)}</p>
             </a>
           </div>
