@@ -1,14 +1,13 @@
-import styles from "./CollectionCard.module.css"
-import Link from "next/link"
-import Image from "next/image"
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from "react"
 import { BigNumber, ethers } from "ethers"
-import { truncateStr } from "../../utils/truncateStr"
+import Image from "next/image"
+import Link from "next/link"
+import { useEffect, useState } from "react"
 import { GET_FLOOR_NFT } from "../../constants/subGraphQueries"
-import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
-import useTokenURI from "../../utils/useTokenURI"
 import getABI from "../../utils/getABI"
+import { truncateStr } from "../../utils/truncateStr"
+import styles from "./CollectionCard.module.css"
 
 export default function CollectionCard({ name, address, isConnected, signer })
 {

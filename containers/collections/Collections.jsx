@@ -1,11 +1,10 @@
-import { GET_DROP_COLLECTIONS, GET_FLOOR_NFT, GET_FOUR_COLLECTIONS, GET_REAL_COLLECTIONS } from "../../constants/subGraphQueries"
-import { CollectionCard } from "../../components/exportComps"
-import { BigNumber, ethers } from "ethers"
-import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
-import { useCallback, useEffect, useState } from "react"
-import { useNotification } from "../../utils/NotificationProvider"
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client"
+import { ethers } from "ethers"
 import Link from "next/link"
-import useTokenURI from "../../utils/useTokenURI"
+import { useEffect, useState } from "react"
+import { CollectionCard } from "../../components/exportComps"
+import { GET_DROP_COLLECTIONS, GET_FOUR_COLLECTIONS, GET_REAL_COLLECTIONS } from "../../constants/subGraphQueries"
+import { useNotification } from "../../utils/NotificationProvider"
 import styles from "./Collections.module.css"
 
 
@@ -15,10 +14,9 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
   const [cardTokenId, setCardTokenId] = useState("0")
   const [collections, setCollections] = useState([])
   const [currentOffset, setCurrentOffset] = useState(0)
-  const { tokenName, tokenDescription, imageURI, collectionImageURI, getTokenURI } = useTokenURI()
   const dispatch = useNotification()
 
-  // const { loading: collLoading, error: collError, data: collections } = useQuery(GET_COLLECTIONS)
+  
   const client = new ApolloClient({
     uri: process.env.NEXT_PUBLIC_SUBGRAPH_URI,
     cache: new InMemoryCache(),
@@ -31,14 +29,14 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         query: gql(GET_FOUR_COLLECTIONS)
       })
       .then(async (data) => {
-        // console.log("Subgraph data: ", data)
+        
         return data
       })
       .catch((err) => {
         console.log("Error fetching data: ", err)
       })
     
-    // homeCollections && setCollections(homeCollections.data.collectionFounds)
+    
 
     async function getRealCollections(nftAddress)
     {
@@ -48,7 +46,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
           variables: { nftAddress: nftAddress },
         })
         .then(async (data) => {
-          // console.log("Subgraph data: ", data)
+          
           return data
         })
         .catch((err) => {
@@ -58,16 +56,16 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     }
 
     const readyCollections = homeCollections.data.collectionFounds
-    // console.log(homeCollections)
+    
     const mutatedCollections = readyCollections.map(async collection => {
       const realCollection = await getRealCollections(collection.nftAddress)
-      // console.log(realCollection)
+      
       if(realCollection.length > 0){
         setCollections(prev => [...prev, collection])
-      // setCollections(homeCollections.data.collectionFounds)
+      
       }
     })
-    // mutatedCollections && setCollections(freeCollections)
+    
   }
 
   async function getCollections()
@@ -79,7 +77,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         variables: { offset: currentOffset },
       })
       .then(async (data) => {
-        // console.log("Subgraph data: ", data)
+        
         return data
       })
       .catch((err) => {
@@ -111,7 +109,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     console.log(readyCollections)
     const mutatedCollections = readyCollections.map(async collection => {
       const realCollection = await getRealCollections(collection.nftAddress)
-      // console.log(realCollection)
+      
       if(realCollection.length > 0){
         setCollections(prev => [...prev, collection])
       }
@@ -123,7 +121,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     if(currentTarget.clientHeight + currentTarget.scrollTop + 1 >= currentTarget.scrollHeight)
     {
       setCurrentOffset(prev => prev + 5)
-      // console.log("here")
+      
     }
   }
 

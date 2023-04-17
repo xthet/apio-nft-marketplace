@@ -68,7 +68,7 @@ export default function NFTVendor({ connect, isConnected, chainId, signer, accou
   async function handleSubmit(event)
   {
     event.preventDefault()
-    // console.log(NFTAddress, tokenId, price)
+    
 
     await approveAndList()
 
