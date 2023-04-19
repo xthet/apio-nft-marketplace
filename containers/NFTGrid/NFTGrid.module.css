@@ -94,9 +94,9 @@
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 1rem;
   padding: 1rem;
-  /* margin-right: 0.2em; */
   max-height: 600px;
   overflow-y: overlay;
+  /* margin-right: 0.2em; */
 }
 
 .apio__NFTGrid--grid_container
@@ -106,6 +106,7 @@
   background: none;
   border-radius: 20px;
   border-style: solid solid none;
+  border: none;
   width: unset;
   /* padding: 1rem 4rem; */
 }
@@ -187,4 +188,19 @@
     height: 350px; 
   }
 
+}
+
+.apio__NFTGrid--cta{
+  margin-top: 1.6rem;
+  padding: 0.6rem 2rem;
+  font-family: var(--font-family);
+  font-size: 18px;
+  line-height: 25px;
+  font-weight: 500;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  color: rgba(255, 20, 147, 1);
+  background: rgba(255,255,255,1);
+  cursor: pointer;
 }

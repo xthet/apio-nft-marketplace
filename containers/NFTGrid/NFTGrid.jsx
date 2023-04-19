@@ -1,16 +1,15 @@
-import styles from "./NFTGrid.module.css"
-import { CollectionHeader, NFTCard } from "../../components/exportComps"
-import { GET_NFTS, GET_FLOOR_NFT, GET_COLLECTION } from "../../constants/subGraphQueries"
-import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
-import { BigNumber, ethers } from "ethers"
+import { ApolloClient, InMemoryCache } from "@apollo/client"
+import { ethers } from "ethers"
 import { useEffect, useState } from "react"
+import { CollectionHeader, NFTCard } from "../../components/exportComps"
+import { GET_NFTS } from "../../constants/subGraphQueries"
+import styles from "./NFTGrid.module.css"
 
 export default function NFTGrid({ connect, isConnected, chainId, signer, address, account })
 {
   const [currentNFTData, setCurrentNFTData] = useState([])
   const [currentOffset, setCurrentOffset] = useState(0)
   const [cardPrice, setCardPrice] = useState(ethers.BigNumber.from("0"))
-
   
   async function getNFTData()
   {
@@ -22,7 +21,7 @@ export default function NFTGrid({ connect, isConnected, chainId, signer, address
 
     const NFTData = await client
       .query({
-        query: gql(GET_NFTS),
+        query: GET_NFTS,
         variables: { activeNFTAddress: activeNFTAddress, offset: currentOffset },
       })
       .then(async (data) => {
@@ -32,21 +31,10 @@ export default function NFTGrid({ connect, isConnected, chainId, signer, address
       .catch((err) => {
         console.log("Error fetching data: ", err)
       })
-
-    setCurrentNFTData(prev => [...prev, ...NFTData.data.activeItems])
-    // console.log(currentOffset)
-  }
-
-  function handleGridScroll({ currentTarget })
-  {
-    console.log(currentTarget.clientHeight, currentTarget.scrollTop, currentTarget.scrollHeight)
-    if(currentTarget.clientHeight + currentTarget.scrollTop + 1 >= currentTarget.scrollHeight)
-    {
-      if(currentTarget.clientHeight !== currentTarget.scrollHeight)
-      {
-        setCurrentOffset(prev => prev + 5)
-        // console.log("here")
-      }
+    if(currentOffset == 0){
+      setCurrentNFTData(NFTData.data.activeItems)
+    }else{
+      setCurrentNFTData(prev=>[...prev, ...NFTData.data.activeItems])
     }
   }
 
@@ -69,7 +57,7 @@ export default function NFTGrid({ connect, isConnected, chainId, signer, address
         <button onClick={connect}>Connect your wallet</button>
       </div>
       <div className={styles["apio__NFTGrid--grid_container"]}>
-        <div className={isConnected ? styles["apio__NFTGrid--grid"] : styles["apio__NFTGrid--notConnected"]} onScroll={handleGridScroll}>
+        <div className={isConnected ? styles["apio__NFTGrid--grid"] : styles["apio__NFTGrid--notConnected"]}>
           {!currentNFTData ? <p>Loading...</p> : currentNFTData.map((NFT, index)=>{
             const { price, tokenId, nftAddress, seller } = NFT
             return (
@@ -89,6 +77,7 @@ export default function NFTGrid({ connect, isConnected, chainId, signer, address
           })}
         </div>
       </div>
+      {currentNFTData.length > 5 && <button className={styles["apio__NFTGrid--cta"]} onClick={()=>{setCurrentOffset(prev=>prev + 10)}}>{"See more"}</button>}
     </div>
   )
 }

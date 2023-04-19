@@ -74,6 +74,7 @@
   border-radius: 20px;
   border-style: solid solid none;
   width: unset;
+  border: none;
   /* padding: 1rem 1rem; */
 }
 
@@ -124,4 +125,19 @@
     grid-template-columns: repeat(2, 1fr);
     height: 350px; 
   }
+}
+
+.apio__user-nfts--cta{
+  margin-top: 1.6rem;
+  padding: 0.6rem 2rem;
+  font-family: var(--font-family);
+  font-size: 18px;
+  line-height: 25px;
+  font-weight: 500;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  color: rgba(255, 20, 147, 1);
+  background: rgba(255,255,255,1);
+  cursor: pointer;
 }

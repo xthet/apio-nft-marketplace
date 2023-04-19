@@ -6,10 +6,12 @@ import { CollectionCard } from "../../components/exportComps"
 import { GET_DROP_COLLECTIONS, GET_FOUR_COLLECTIONS, GET_REAL_COLLECTIONS } from "../../constants/subGraphQueries"
 import { useNotification } from "../../utils/NotificationProvider"
 import styles from "./Collections.module.css"
+import { useRouter } from "next/router"
 
 
 export default function Collections({ connect, isConnected, chainId, signer, type })
-{
+{ 
+  const router = useRouter()
   const [cardPrice, setCardPrice] = useState(ethers.BigNumber.from("0"))
   const [cardTokenId, setCardTokenId] = useState("0")
   const [collections, setCollections] = useState([])
@@ -39,7 +41,6 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
 
   async function getCollections()
   {
-    let collArray = []
     const foundCollections = await client
       .query({
         query: GET_DROP_COLLECTIONS,
@@ -51,18 +52,10 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
       .catch((err) => {
         console.log("Error fetching data: ", err)
       })
-    
-    collArray = [...collArray, ...foundCollections.data.collectionFounds]
-
-    setCollections(prev => [...prev, ...foundCollections.data.collectionFounds])
-  }
-
-  function handleGridScroll({ currentTarget })
-  {
-    if(currentTarget.clientHeight + currentTarget.scrollTop + 1 >= currentTarget.scrollHeight)
-    {
-      setCurrentOffset(prev => prev + 5)
-      
+    if(currentOffset == 0){
+      setCollections(foundCollections.data.collectionFounds)
+    }else{
+      setCollections(prev => [...prev, ...foundCollections.data.collectionFounds])
     }
   }
 
@@ -79,7 +72,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     }
 
     isConnected && runQueries()
-  },[isConnected])
+  },[isConnected, currentOffset])
 
   return (
     <div className={`section__padding ${styles["apio__collections"]}`} id={type == "home" ? "drops" : "collections"}>
@@ -101,7 +94,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
       </div>
 
       <div className={styles["apio__collections--grid_container"]}>
-        <div className={isConnected ? styles["apio__collections--grid"] : styles["apio__collections--notConnected"]} onScroll={handleGridScroll}>
+        <div className={isConnected ? styles["apio__collections--grid"] : styles["apio__collections--notConnected"]}>
           {!collections ? <p> </p> : type === "home" ?
             collections.slice(0,4).map((collection, index)=>{
               const { name, symbol, nftAddress } = collection
@@ -116,10 +109,13 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
         </div>
       </div>
 
-      {type == "home" && isConnected &&
-      <div className={styles["apio__collections--see_more"]}>
-        <Link href="/explore"><div><button className={styles["apio__collections--see_more_btn"]}>See More...</button></div></Link>
-      </div>}
+      {
+        <div className={styles["apio__collections--see_more"]}>
+          <div><button className={styles["apio__collections--see_more_btn"]}
+            onClick={type == "home" ? ()=>{router.push("/explore")} : ()=>{setCurrentOffset(prev=>prev + 10)}}
+          >
+          See More...</button></div>
+        </div>}
     </div>
   )
 }

@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react"
-import styles from "./NFTVendor.module.css"
 import { ethers } from "ethers"
-import { truncateStr } from "../../utils/truncateStr"
+import { useEffect, useState } from "react"
+import contractABI from "../../constants/abis/ERC721.json"
 import NFTMarketplaceABI from "../../constants/abis/NFTMarketplace.json"
 import networkMapping from "../../constants/networkMapping.json"
-import getABI from "../../utils/getABI"
 import { useNotification } from "../../utils/NotificationProvider"
+import { truncateStr } from "../../utils/truncateStr"
+import styles from "./NFTVendor.module.css"
 
 export default function NFTVendor({ connect, isConnected, chainId, signer, account })
 {
@@ -23,8 +23,7 @@ export default function NFTVendor({ connect, isConnected, chainId, signer, accou
     if (typeof window.ethereum !== "undefined")
     {
       console.log("Approving...")
-      const contractABI = await getABI(NFTAddress)
-      const NFTContract = new ethers.Contract(NFTAddress, contractABI, signer)
+      const NFTContract = new ethers.Contract(NFTAddress, contractABI.abi, signer)
       try{
         const approveTx = await NFTContract.approve(marketplaceAddress, tokenId)
         const approveTxR = await approveTx.wait(1)
@@ -47,7 +46,7 @@ export default function NFTVendor({ connect, isConnected, chainId, signer, accou
       if (typeof window.ethereum !== "undefined")
       {
         console.log("Listing...")
-        const NFTMarketplaceContract = new ethers.Contract(marketplaceAddress, NFTMarketplaceABI, signer)
+        const NFTMarketplaceContract = new ethers.Contract(marketplaceAddress, NFTMarketplaceABI.abi, signer)
         try{
           const listTx = await NFTMarketplaceContract.listItem(NFTAddress, tokenId, price)
           const listTxR = await listTx.wait(1)
@@ -82,7 +81,7 @@ export default function NFTVendor({ connect, isConnected, chainId, signer, accou
     if (typeof window.ethereum !== "undefined")
     {
       console.log("Withdrawing...")
-      const NFTMarketplaceContract = new ethers.Contract(marketplaceAddress, NFTMarketplaceABI, signer)
+      const NFTMarketplaceContract = new ethers.Contract(marketplaceAddress, NFTMarketplaceABI.abi, signer)
       try{
         const withdrawTx = await NFTMarketplaceContract.withdrawProceeds()
         const withdrawTxR = await withdrawTx.wait(1)
@@ -101,7 +100,7 @@ export default function NFTVendor({ connect, isConnected, chainId, signer, accou
   {
     if (typeof window.ethereum !== "undefined")
     {
-      const NFTMarketplaceContract = new ethers.Contract(marketplaceAddress, NFTMarketplaceABI, signer)
+      const NFTMarketplaceContract = new ethers.Contract(marketplaceAddress, NFTMarketplaceABI.abi, signer)
       try{
         const proceeds = await NFTMarketplaceContract.getProceeds(account)
         if(proceeds){setEarnings(proceeds.toString())}

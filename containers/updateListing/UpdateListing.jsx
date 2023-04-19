@@ -27,7 +27,7 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
     console.log(currentOffset)
     const userNFTs = await client
       .query({
-        query: gql(GET_USER_LISTINGS),
+        query: GET_USER_LISTINGS,
         variables: { activeAccount: activeAccount, offset: currentOffset },
       })
       .then(async (data) => {
@@ -38,18 +38,12 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
         console.log("Error fetching data: ", err)
       })
     // console.log(currentOffset)
-    userNFTs && setActiveUserNFTs(prevUserNFTs => [...prevUserNFTs, ...userNFTs.data.activeItems])
-  }
-
-  function handleGridScroll({ currentTarget })
-  {
-    if(currentTarget.clientHeight + currentTarget.scrollTop + 1 >= currentTarget.scrollHeight)
-    {
-      setCurrentOffset(prev => prev + 5)
-      // console.log("here")
+    if(currentOffset == 0){
+      setActiveUserNFTs(userNFTs.data.activeItems)
+    }else{
+      setActiveUserNFTs(prevUserNFTs => [...prevUserNFTs, ...userNFTs.data.activeItems])
     }
   }
-
 
   useEffect(()=>
   {
@@ -71,7 +65,7 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
         <button onClick={connect}>Connect your wallet</button>
       </div>
       <div className={styles["apio__updateListing--modal--listings--grid_container"]}>
-        <div className={isConnected ? styles["apio__updateListing--grid"] : styles["apio__updateListing--notConnected"]} onScroll={handleGridScroll}>
+        <div className={isConnected ? styles["apio__updateListing--grid"] : styles["apio__updateListing--notConnected"]}>
           {!activeUserNFTs ? <p>Loading...</p> : activeUserNFTs.length == 0 ? <h3>You have no active listings.</h3> : activeUserNFTs.map((NFT, index)=>{
             const { price, tokenId, nftAddress, seller } = NFT
             return (
@@ -91,6 +85,8 @@ export default function UpdateListing({ connect, isConnected, chainId, signer, a
           })}
         </div>
       </div>
+      {activeUserNFTs.length > 5 && <button className={styles["apio__user-nfts--cta"]} onClick={()=>{setCurrentOffset(prev=>prev + 10)}}>{"See more"}</button>}
+
     </div>
   )
 }

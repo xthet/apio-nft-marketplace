@@ -49,6 +49,23 @@ const GET_COLLECTION = gql`
       nftAddress
       tokenURI
       floorPrice
+      listedCount
+    }
+  }
+`
+
+const GET_NFT = gql`
+  query getNFT($id: String!) {
+    activeItem(id:$id){
+      id
+      seller
+      nftAddress
+      tokenId
+      price
+      createdAt
+      name
+      symbol
+      tokenURI      
     }
   }
 `
@@ -65,7 +82,7 @@ const GET_FLOOR_NFT = gql`
 
 const GET_NFTS = gql`
   query getNFTs($activeNFTAddress: String!, $offset: Int!) {
-    activeItems(first: 5, skip: $offset, where:{nftAddress: $activeNFTAddress}, orderBy: createdAt, orderDirection: desc) {
+    activeItems(first: 10, skip: $offset, where:{nftAddress: $activeNFTAddress}, orderBy: createdAt, orderDirection: desc) {
       id
       price
       tokenId
@@ -78,7 +95,7 @@ const GET_NFTS = gql`
 
 const GET_USER_LISTINGS = gql`
   query getUserListings($activeAccount: String!, $offset: Int!) {
-    activeItems(first: 5, skip: $offset, where:{seller: $activeAccount}, orderBy: createdAt, orderDirection: desc) {
+    activeItems(first: 10, skip: $offset, where:{seller: $activeAccount}, orderBy: createdAt, orderDirection: desc) {
       id
       nftAddress
       seller
@@ -97,4 +114,4 @@ const GET_COLLECTION_NAME = gql`
   }
 `
 
-export { GET_REAL_COLLECTIONS, GET_COLLECTIONS, GET_FLOOR_NFT, GET_NFTS, GET_COLLECTION, GET_USER_LISTINGS, GET_COLLECTION_NAME, GET_DROP_COLLECTIONS, GET_FOUR_COLLECTIONS }
+export { GET_NFT, GET_REAL_COLLECTIONS, GET_COLLECTIONS, GET_FLOOR_NFT, GET_NFTS, GET_COLLECTION, GET_USER_LISTINGS, GET_COLLECTION_NAME, GET_DROP_COLLECTIONS, GET_FOUR_COLLECTIONS }

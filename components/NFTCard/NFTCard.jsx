@@ -3,7 +3,7 @@ import styles from "./NFTCard.module.css"
 import { useRouter } from "next/router"
 import networkMapping from "../../constants/networkMapping.json"
 import marketplaceABI from "../../constants/abis/NFTMarketplace.json"
-import { GET_COLLECTION } from "../../constants/subGraphQueries"
+import { GET_COLLECTION, GET_NFT } from "../../constants/subGraphQueries"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
 import { ethers, BigNumber } from "ethers"
@@ -43,8 +43,8 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
     const activeNFTAddress = await nftAddress
     const collectionData = await client
       .query({
-        query: gql(GET_COLLECTION),
-        variables: { activeNFTAddress: activeNFTAddress },
+        query: GET_COLLECTION,
+        variables: { activeCollection: activeNFTAddress },
       })
       .then(async (data) => {
         // console.log("Subgraph data: ", data)
@@ -54,8 +54,24 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
         console.log("Error fetching data: ", err)
       })
 
-    collectionData && setCollectionName(collectionData.data.collectionFounds[0].name)
-    !loaded && getTokenURI(nftAddress, tokenId)
+    collectionData && setCollectionName(collectionData.data.collectionFound.name)
+    const collURI = collectionData.data.collectionFound.tokenURI
+    const collImgURI = await fetch(collURI.replace("ipfs://", "https://ipfs.io/ipfs/")).then(res=>res.json()).then(data=>data.image.replace("ipfs://", "https://ipfs.io/ipfs/"))
+    setCollectionImageURI(collImgURI)
+    
+    const NFTID = tokenId.toString() + nftAddress
+    const NFTData = await client
+      .query({
+        query: GET_NFT,
+        variables: { id: NFTID },
+      })
+      .then(data => data)
+      .catch(err=>console.log(err))
+
+    setTokenName(NFTData.data.activeItem.symbol)
+    const tokenURI = collectionData.data.collectionFound.tokenURI
+    const imgURI = await fetch(tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")).then(res=>res.json()).then(data=>data.image.replace("ipfs://", "https://ipfs.io/ipfs/"))
+    setImageURI(imgURI)
   }
 
 
@@ -70,7 +86,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
     }
     else
     {
-      const MarketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceABI, signer)
+      const MarketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceABI.abi, signer)
       try{
         const buyNFTTx = await MarketplaceContract.buyItem(nftAddress, tokenId, { value: price })
         const buyNFTTxR = await buyNFTTx.wait(1)
@@ -91,7 +107,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
   {
     if(window.ethereum !== "undefined")
     {
-      const MarketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceABI, signer)
+      const MarketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceABI.abi, signer)
       // console.log(nftAddress, tokenId)
       try{
         const removeNFTTx = await MarketplaceContract.cancelListing(nftAddress, tokenId)
@@ -112,7 +128,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
   {
     if(window.ethereum !== "undefined")
     {
-      const MarketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceABI, signer)
+      const MarketplaceContract = new ethers.Contract(marketplaceAddress, marketplaceABI.abi, signer)
       try{
         const weiPrice = ethers.utils.parseUnits(newPrice, "ether").toString()
         const updateNFTTx = await MarketplaceContract.updateListing(nftAddress, tokenId, weiPrice)
@@ -126,31 +142,6 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
           })
         }
       }catch(e){console.log(e)}
-    }
-  }
-
-  async function getTokenURI(nftAddress, tokenId, collectionType = false)
-  {
-    if (typeof window.ethereum !== "undefined")
-    {
-      try{
-        const nftABI = await getABI(nftAddress)
-        const NFTContract = new ethers.Contract(nftAddress, nftABI, signer)
-        const tokenURI = await NFTContract.tokenURI(tokenId)
-        collectionType ? await mutateURI(tokenURI, true) : await mutateURI(tokenURI)
-      }catch(e){console.log(e)}
-    }
-
-    async function mutateURI(tokenURI, collectionType = false)
-    {
-      const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/") // switching to https
-      const tokenURIResponse = await (await fetch(requestURL)).json() 
-      const imageURI = tokenURIResponse.image
-      const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
-      !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
-      // console.log(imageURI)
-      setTokenName(tokenURIResponse.name)
-      setTokenDescription(tokenURIResponse.description)
     }
   }
 
