@@ -42,7 +42,7 @@
   text-align: center;
   font-family: var(--font-family);
   font-weight: 700;
-  font-size: 65px;
+  font-size: 45px;
   line-height: 70px;
   letter-spacing: 0.02em;
   color: #fff;
@@ -98,6 +98,7 @@
   background: none;
   border-radius: 20px;
   border-style: solid solid none;
+  border:none;
   /* padding: 1rem 4rem; */
   width: unset;
 

@@ -27,67 +27,23 @@ export default function CollectionHeader({ name, address, isConnected, signer })
 
     const collectionData = await client
       .query({
-        query: gql(GET_COLLECTION),
-        variables: { activeNFTAddress: nftAddress },
+        query: GET_COLLECTION,
+        variables: { activeCollection: nftAddress },
       })
       .then(async (data) => {
-        // console.log("Subgraph data: ", data)
         return data
       })
       .catch((err) => {
         console.log("Error fetching data: ", err)
       })
 
-    setCollectionName(collectionData.data.collectionFounds[0].name)
+    setCollectionName(collectionData.data.collectionFound.name)
+    setFloorPrice(collectionData.data.collectionFound.floorPrice)
+    const tokenURI = collectionData.data.collectionFound.tokenURI
+    const imgURI = await fetch(tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")).then(res=>res.json()).then(data=>data.image.replace("ipfs://", "https://ipfs.io/ipfs/"))
+    setImageURI(imgURI)
 
-    const floorNFT = await client
-      .query({
-        query: gql(GET_FLOOR_NFT),
-        variables: { activeNFTAddress: nftAddress },
-      })
-      .then(async (data) => {
-        // console.log("Subgraph data: ", data)
-        const floorPrice = await data.data.activeItems[0].price
-        const floorTokenId = await data.data.activeItems[0].tokenId
-        return { floorPrice: floorPrice, floorTokenId: floorTokenId }
-      })
-      .catch((err) => {
-        console.log("Error fetching data: ", err)
-      })
-    
-    if(floorNFT)
-    {
-      console.log(floorNFT.floorPrice)
-      
-      setFloorPrice(floorNFT.floorPrice)
-    }
-    getTokenURI(address, "0")
-  }
-
-
-  async function getTokenURI(nftAddress, tokenId, collectionType = false)
-  {
-    if (typeof window.ethereum !== "undefined")
-    {
-      try{
-        const nftABI = await getABI(nftAddress)
-        const NFTContract = new ethers.Contract(nftAddress, nftABI, signer)
-        const tokenURI = await NFTContract.tokenURI(tokenId)
-        collectionType ? await mutateURI(tokenURI, true) : await mutateURI(tokenURI)
-      }catch(e){console.log(e)}
-    }
-
-    async function mutateURI(tokenURI, collectionType = false)
-    {
-      const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/") // switching to https
-      const tokenURIResponse = await (await fetch(requestURL)).json() 
-      const imageURI = tokenURIResponse.image
-      const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
-      !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
-      console.log(imageURI, "here")
-      setTokenName(tokenURIResponse.name)
-      setTokenDescription(tokenURIResponse.description)
-    }
+    const ERC721Data = await fetch(`https://api-sepolia.etherscan.io/api?module=stats&action=tokenholders&contractaddress=${address}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`).then(res=>res.json()).then(data=>console.log(data))
   }
 
   useEffect(()=>{
@@ -121,7 +77,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
               <h3>FLOOR PRICE:</h3>
               <h3>{ethers.utils.formatUnits(floorPrice, "ether")} rETH</h3>
             </div>
-            {/* <div className={styles["apio__collectionHeader--details_container--stat_boxes--stat_box"]}>
+            <div className={styles["apio__collectionHeader--details_container--stat_boxes--stat_box"]}>
               <h3>LISTED:</h3>
               <h3>30</h3>
             </div>
@@ -132,7 +88,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
             <div className={styles["apio__collectionHeader--details_container--stat_boxes--stat_box"]}>
               <h3>TOTAL SUPPLY:</h3>
               <h3>3000</h3>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

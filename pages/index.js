@@ -1,14 +1,12 @@
 import Head from "next/head"
-import { Brands, Navbar, NFTCard, Notice } from "../components/exportComps"
-import { Header, Footer, SellNFTs, Collections } from "../containers/exportConts"
-import useConnection from "../utils/useConnection"
-import styles from "../styles/Home.module.css"
+import { Brands, Navbar } from "../components/exportComps"
+import { Collections, Footer, Header, SellNFTs } from "../containers/exportConts"
+import { ConnectionContext } from "../contexts/connection"
+import { useContext } from "react"
 
 
 export default function Home() {
-  const { hasMetamask, isConnected, chainId, signer, account, connect } = useConnection()
-
-
+  const { isConnected, signer, account, provider, connect, chainId } = useContext(ConnectionContext)
 
   return (
     <div className="App gradient__bg">

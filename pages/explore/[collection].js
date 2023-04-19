@@ -1,15 +1,15 @@
-import Head from "next/head"
-import useConnection from "../../utils/useConnection"
-import { useRouter } from "next/router"
-import { Brands, Navbar, NFTCard, Notice } from "../../components/exportComps"
-import { Header, Footer, SellNFTs, Collections, NFTGrid } from "../../containers/exportConts"
 import ErrorPage from "next/error"
-import styles from "../../styles/Home.module.css"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import { useContext } from "react"
+import { Navbar } from "../../components/exportComps"
+import { Footer, NFTGrid } from "../../containers/exportConts"
+import { ConnectionContext } from "../../contexts/connection"
 
 export default function Explore() {
   const router = useRouter()
   const { collection } = router.query
-  const { hasMetamask, isConnected, chainId, signer, account, connect } = useConnection()
+  const { isConnected, signer, account, provider, connect, chainId } = useContext(ConnectionContext)
  
 
   return (

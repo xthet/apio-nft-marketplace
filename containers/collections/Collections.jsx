@@ -26,46 +26,15 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
   {
     const homeCollections = await client
       .query({
-        query: gql(GET_FOUR_COLLECTIONS)
+        query: GET_FOUR_COLLECTIONS
       })
       .then(async (data) => {
-        
         return data
       })
       .catch((err) => {
         console.log("Error fetching data: ", err)
       })
-    
-    
-
-    async function getRealCollections(nftAddress)
-    {
-      const realCollections = await client
-        .query({
-          query: gql(GET_REAL_COLLECTIONS),
-          variables: { nftAddress: nftAddress },
-        })
-        .then(async (data) => {
-          
-          return data
-        })
-        .catch((err) => {
-          console.log("Error fetching data: ", err)
-        })
-      return realCollections.data.activeItems
-    }
-
-    const readyCollections = homeCollections.data.collectionFounds
-    
-    const mutatedCollections = readyCollections.map(async collection => {
-      const realCollection = await getRealCollections(collection.nftAddress)
-      
-      if(realCollection.length > 0){
-        setCollections(prev => [...prev, collection])
-      
-      }
-    })
-    
+    setCollections(homeCollections.data.collectionFounds)    
   }
 
   async function getCollections()
@@ -73,11 +42,10 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     let collArray = []
     const foundCollections = await client
       .query({
-        query: gql(GET_DROP_COLLECTIONS),
+        query: GET_DROP_COLLECTIONS,
         variables: { offset: currentOffset },
       })
       .then(async (data) => {
-        
         return data
       })
       .catch((err) => {
@@ -86,34 +54,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
     
     collArray = [...collArray, ...foundCollections.data.collectionFounds]
 
-    async function getRealCollections(nftAddress)
-    {
-      const realCollections = await client
-        .query({
-          query: gql(GET_REAL_COLLECTIONS),
-          variables: { nftAddress: nftAddress },
-        })
-        .then(async (data) => {
-          console.log("Subgraph data: ", data)
-          return data
-        })
-        .catch((err) => {
-          console.log("Error fetching data: ", err)
-        })
-
-      return realCollections.data.activeItems
-    }
-
-    const readyCollections = collArray
-
-    console.log(readyCollections)
-    const mutatedCollections = readyCollections.map(async collection => {
-      const realCollection = await getRealCollections(collection.nftAddress)
-      
-      if(realCollection.length > 0){
-        setCollections(prev => [...prev, collection])
-      }
-    })
+    setCollections(prev => [...prev, ...foundCollections.data.collectionFounds])
   }
 
   function handleGridScroll({ currentTarget })

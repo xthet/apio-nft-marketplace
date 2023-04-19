@@ -2,7 +2,7 @@ import Image from "next/image"
 import styles from "./NFTCard.module.css"
 import { useRouter } from "next/router"
 import networkMapping from "../../constants/networkMapping.json"
-import marketplaceABI from "../../constants/NFTMarketplace.json"
+import marketplaceABI from "../../constants/abis/NFTMarketplace.json"
 import { GET_COLLECTION } from "../../constants/subGraphQueries"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
@@ -10,7 +10,6 @@ import { ethers, BigNumber } from "ethers"
 import { truncateStr } from "../../utils/truncateStr"
 import { useNotification } from "../../utils/NotificationProvider"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
-import getABI from "../../utils/getABI"
 
 
 export default function NFTCard({ price, nftAddress, tokenId, seller, account, signer, chainId, type, isConnected })

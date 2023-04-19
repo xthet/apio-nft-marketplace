@@ -42,7 +42,7 @@ export default function Navbar({ connect, isConnected, account })
         </div> */}
 
         <div className={styles["apio__navbar--menu_connect"]}>
-          <button disabled={isConnected} type="button" onClick={connect}>{isConnected ? `${truncateStr(account || "", 8)}  | Connected` : "Connect Wallet"}</button>
+          <button disabled={isConnected} type="button" onClick={connect}>{isConnected ? "Connected" : "Connect Wallet"}</button>
         </div>
 
         {/* v mobile hamburger */}

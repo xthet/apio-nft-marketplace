@@ -1,13 +1,12 @@
 import Head from "next/head"
-import useConnection from "../../utils/useConnection"
-import { Navbar, Notice } from "../../components/exportComps"
-import { Footer, Collections } from "../../containers/exportConts"
-import styles from "../../styles/Home.module.css"
+import { useContext } from "react"
+import { Navbar } from "../../components/exportComps"
+import { Collections, Footer } from "../../containers/exportConts"
+import { ConnectionContext } from "../../contexts/connection"
 
 
 export default function Explore() {
-  const { hasMetamask, isConnected, chainId, signer, account, connect } = useConnection()
-
+  const { isConnected, signer, account, provider, connect, chainId } = useContext(ConnectionContext)
 
   return (
     <div className="App gradient__bg">

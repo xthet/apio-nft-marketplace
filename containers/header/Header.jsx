@@ -34,7 +34,7 @@ export default function Header({ connect, isConnected, account, signer })
   {
     const homeCollections = await client
       .query({
-        query: gql(GET_FOUR_COLLECTIONS)
+        query: GET_FOUR_COLLECTIONS
       })
       .then(async (data) => {
         // console.log("Subgraph data: ", data)
@@ -44,44 +44,20 @@ export default function Header({ connect, isConnected, account, signer })
         console.log("Error fetching data: ", err)
       })
     
-    async function getRealCollections(nftAddress)
-    {
-      const realCollections = await client
-        .query({
-          query: gql(GET_REAL_COLLECTIONS),
-          variables: { nftAddress: nftAddress },
-        })
-        .then(async (data) => {
-          // console.log("Subgraph data: ", data)
-          return data
-        })
-        .catch((err) => {
-          console.log("Error fetching data: ", err)
-        })
-      return realCollections.data.activeItems
-    }
-
-    const readyCollections = homeCollections.data.collectionFounds
-    const mutatedCollections = readyCollections.map(async collection => {
-      const realCollection = await getRealCollections(collection.nftAddress)
-      if(realCollection.length > 0){
-        setCollections(prev => [...prev, collection])
-      }
-    })
-    // mutatedCollections && setCollections(freeCollections)
+    setCollections(homeCollections.data.collectionFounds)
   }
 
 
   useEffect(()=>{
     async function runHeader()
     {
-      // console.log(collections)
       if(collections.length){ 
         const rand = Math.floor(Math.random() * collections.length)
-        const { name, symbol, nftAddress } = collections[rand]
-        await getTokenURI(nftAddress, "0", true)
+        const { name, symbol, nftAddress, tokenURI } = collections[rand]
+        const nftImg = await fetch(tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")).then(res=>res.json()).then(data=>data.image.replace("ipfs://", "https://ipfs.io/ipfs/"))
         setNftAddress(nftAddress)
         setName(name)
+        setCollectionImageURI(nftImg)
       }
     }
 
@@ -103,7 +79,11 @@ export default function Header({ connect, isConnected, account, signer })
     return (
       <div className={styles["apio__header--image_container--image_frame"]}>
         <div className={styles["apio__header--image_container--image"]}>
-          {collectionImageURI && <div className={styles["nimg"]}>{<Image onLoad={()=>{setLoaded(true)}} loader={()=>collectionImageURI} src={collectionImageURI} alt="headerNFT" layout="fill" objectFit="cover"/>}</div>}
+          <div className={styles["nimg"]}>
+            {<Image onLoad={()=>{setLoaded(true)}} 
+              loader={()=>collectionImageURI} src={collectionImageURI} 
+              alt="headerNFT" layout="fill" objectFit="cover"/>}
+          </div>
         </div>
         <div className={styles["apio__header--image_container--separator"]}></div>
         <div className={styles["apio__header--image_container--text"]}>

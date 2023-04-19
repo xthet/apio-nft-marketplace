@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client"
+import { gql } from "@apollo/client"
 
 const GET_COLLECTIONS = gql`
 {
@@ -6,21 +6,23 @@ const GET_COLLECTIONS = gql`
     name
     symbol
     nftAddress
+    tokenURI
   }
 }
 `
 
-const GET_DROP_COLLECTIONS = `
+const GET_DROP_COLLECTIONS = gql`
   query getCollections($offset: Int!){
     collectionFounds(first: 5, skip: $offset, orderBy: createdAt, orderDirection: desc) {
       name
       symbol
       nftAddress
+      tokenURI
     }
   }
 `
 
-const GET_REAL_COLLECTIONS = `
+const GET_REAL_COLLECTIONS = gql`
   query getRealCollections($nftAddress: String!){
     activeItems(where:{nftAddress: $nftAddress}){
       tokenId
@@ -28,36 +30,40 @@ const GET_REAL_COLLECTIONS = `
   }
 `
 
-const GET_FOUR_COLLECTIONS = `
+const GET_FOUR_COLLECTIONS = gql`
   query getCollections{
     collectionFounds(first: 10, orderBy: createdAt, orderDirection: desc) {
       name
       symbol
       nftAddress
+      tokenURI
     }
   }
 `
 
-const GET_COLLECTION = `
-  query GetCollection($activeNFTAddress: String!) {
-    collectionFounds(first: 1, where:{nftAddress: $activeNFTAddress}) {
+const GET_COLLECTION = gql`
+  query GetCollection($activeCollection: String!) {
+    collectionFound(id:$activeCollection) {
       name
       symbol
       nftAddress
+      tokenURI
+      floorPrice
     }
   }
 `
 
-const GET_FLOOR_NFT = `
+const GET_FLOOR_NFT = gql`
   query GetNFTData($activeNFTAddress: String!) {
     activeItems(first: 1, where:{nftAddress: $activeNFTAddress}, orderBy: price, orderDirection: asc) {
       price
       tokenId
+      tokenURI
     }
   }
 `
 
-const GET_NFTS = `
+const GET_NFTS = gql`
   query getNFTs($activeNFTAddress: String!, $offset: Int!) {
     activeItems(first: 5, skip: $offset, where:{nftAddress: $activeNFTAddress}, orderBy: createdAt, orderDirection: desc) {
       id
@@ -65,11 +71,12 @@ const GET_NFTS = `
       tokenId
       seller
       nftAddress
+      tokenURI
     }
   }
 `
 
-const GET_USER_LISTINGS = `
+const GET_USER_LISTINGS = gql`
   query getUserListings($activeAccount: String!, $offset: Int!) {
     activeItems(first: 5, skip: $offset, where:{seller: $activeAccount}, orderBy: createdAt, orderDirection: desc) {
       id
@@ -77,11 +84,12 @@ const GET_USER_LISTINGS = `
       seller
       tokenId
       price
+      tokenURI
     }
   }
 `
 
-const GET_COLLECTION_NAME = `
+const GET_COLLECTION_NAME = gql`
   query collectionName($activeNFTAddress: String!) {
     collectionFounds(where:{nftAddress: $activeNFTAddress}) {
       name

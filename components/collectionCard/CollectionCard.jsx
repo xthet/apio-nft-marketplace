@@ -4,12 +4,12 @@ import { BigNumber, ethers } from "ethers"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { GET_FLOOR_NFT } from "../../constants/subGraphQueries"
+import { GET_COLLECTION, GET_FLOOR_NFT } from "../../constants/subGraphQueries"
 import getABI from "../../utils/getABI"
 import { truncateStr } from "../../utils/truncateStr"
 import styles from "./CollectionCard.module.css"
 
-export default function CollectionCard({ name, address, isConnected, signer })
+export default function CollectionCard({ address, isConnected, signer })
 {
   const [collectCollection, setCollectCollection] = useState(false)
   const [loaded, setLoaded] = useState(false)
@@ -19,65 +19,37 @@ export default function CollectionCard({ name, address, isConnected, signer })
   const [imageURI, setImageURI] = useState("")
   const [collectionImageURI, setCollectionImageURI] = useState("") 
 
-  async function getFloorNFT(nftAddress)
+  async function getCardDets(nftAddress)
   {
     const client = new ApolloClient({
       uri: process.env.NEXT_PUBLIC_SUBGRAPH_URI,
       cache: new InMemoryCache(),
     })
 
-    const floorNFT = await client
+    const currCollection = await client
       .query({
-        query: gql(GET_FLOOR_NFT),
-        variables: { activeNFTAddress: nftAddress },
+        query: GET_COLLECTION,
+        variables: { activeCollection: nftAddress },
       })
-      .then(async (data) => {
-        // console.log("Subgraph data: ", data)
-        const floorPrice = await data.data.activeItems[0].price
-        const floorTokenId = await data.data.activeItems[0].tokenId
-        return { floorPrice: floorPrice, floorTokenId: floorTokenId }
+      .then(data => {
+        return data
       })
       .catch((err) => {
         console.log("Error fetching data: ", err)
       })
-    
-    if(floorNFT)
-    {
-      // console.log(`Floor NFT: ${floorNFT.floorPrice}`)
-      getTokenURI(address, floorNFT.floorTokenId)
-      setFloorPrice(floorNFT.floorPrice)
-    }
-  }
-
-  async function getTokenURI(nftAddress, tokenId, collectionType = false)
-  {
-    if (typeof window.ethereum !== "undefined")
-    {
-      try{
-        const nftABI = await getABI(nftAddress)
-        const NFTContract = new ethers.Contract(nftAddress, nftABI, signer)
-        const tokenURI = await NFTContract.tokenURI(tokenId)
-        collectionType ? await mutateURI(tokenURI, true) : await mutateURI(tokenURI)
-      }catch(e){console.log(e)}
-    }
-
-    async function mutateURI(tokenURI, collectionType = false)
-    {
-      const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/") // switching to https
-      const tokenURIResponse = await (await fetch(requestURL)).json() 
-      const imageURI = tokenURIResponse.image
-      const imageToURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
-      !collectionType ? setImageURI(imageToURL) : setCollectionImageURI(imageToURL)
-      // console.log(imageURI)
-      setTokenName(tokenURIResponse.name)
-      setTokenDescription(tokenURIResponse.description)
+    if(currCollection){
+      setFloorPrice(currCollection.data.collectionFound.floorPrice)
+      setTokenName(currCollection.data.collectionFound.name)
+      const tokenURI = currCollection.data.collectionFound.tokenURI
+      const imgURI = await fetch(tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")).then(res=>res.json()).then(data=>data.image.replace("ipfs://", "https://ipfs.io/ipfs/"))
+      setImageURI(imgURI)
     }
   }
 
   useEffect(()=>{
-    isConnected && getFloorNFT(address)
-    !imageURI && getFloorNFT(address)
-  },[isConnected, imageURI, name, loaded])
+    isConnected && getCardDets(address)
+    !imageURI && getCardDets(address)
+  },[isConnected, imageURI])
 
 
   return (
@@ -87,7 +59,7 @@ export default function CollectionCard({ name, address, isConnected, signer })
         {imageURI && <div className={styles["nimg"]}><Image onLoad={()=>{setLoaded(true)}} loader={()=>imageURI} src={imageURI} alt="NFT" layout="fill" objectFit="cover"/></div>}
       </div>
       <div className={styles["apio__collectionCard--text"]}>
-        <h3 className={styles["apio__collectionCard--text--name"]}>{`${name}` || <p></p>} </h3>
+        <h3 className={styles["apio__collectionCard--text--name"]}>{`${tokenName}` || <p></p>} </h3>
         <a href={`https://goerli.etherscan.io/token/${address}`} target="_blank" rel="noopener noreferrer">
           <p className={styles["apio__collectionCard--creator"]}>@{truncateStr(address || "", 12)}</p>
         </a>
