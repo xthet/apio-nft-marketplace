@@ -150,7 +150,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
     {
       await getNFTData()
     }
-    isConnected && setUpCard()
+    setUpCard()
   }, [isConnected, imageURI, tokenName, loaded])
 
   return (

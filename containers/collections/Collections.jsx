@@ -71,7 +71,7 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
       }
     }
 
-    isConnected && runQueries()
+    runQueries()
   },[isConnected, currentOffset])
 
   return (
@@ -88,13 +88,14 @@ export default function Collections({ connect, isConnected, chainId, signer, typ
             <h1>Explore Collections</h1>
           </div>
       }
-      <div className={isConnected ? styles["apio__collections--isConnected"] : styles["apio__collections--toConnect"]}>
+      {/* <div className={isConnected ? styles["apio__collections--isConnected"] : styles["apio__collections--toConnect"]}>
         <p>You need to connect your wallet to view NFTs</p>
         <button onClick={connect}>Connect your wallet</button>
-      </div>
+      </div> */}
 
       <div className={styles["apio__collections--grid_container"]}>
-        <div className={isConnected ? styles["apio__collections--grid"] : styles["apio__collections--notConnected"]}>
+        {/* <div className={isConnected ? styles["apio__collections--grid"] : styles["apio__collections--notConnected"]}> */}
+        <div className={styles["apio__collections--grid"]}>
           {!collections ? <p> </p> : type === "home" ?
             collections.slice(0,4).map((collection, index)=>{
               const { name, symbol, nftAddress } = collection

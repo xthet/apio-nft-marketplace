@@ -70,7 +70,7 @@ export default function Header({ connect, isConnected, account, signer })
       await getHomeCollections()
     }
 
-    isConnected && runQueries()
+    runQueries()
   },[isConnected])
 
 
@@ -88,7 +88,7 @@ export default function Header({ connect, isConnected, account, signer })
         <div className={styles["apio__header--image_container--separator"]}></div>
         <div className={styles["apio__header--image_container--text"]}>
           <h3>{name}</h3>
-          <a href={`https://goerli.etherscan.io/token/${nftAddress}`} target="_blank" rel="noopener noreferrer">
+          <a href={`https://sepolia.etherscan.io/token/${nftAddress}`} target="_blank" rel="noopener noreferrer">
             <p>@{truncateStr(nftAddress || "", 12)}</p>
           </a>
         </div>
@@ -144,7 +144,7 @@ export default function Header({ connect, isConnected, account, signer })
         </div>
       </div>
       {
-        !isConnected || !collections 
+        !collections 
           ? <p>Loading</p> 
           : 
           <div className={styles["apio__header--image_container"]}>

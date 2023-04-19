@@ -13,6 +13,7 @@ function ConnectionProvider ({ children }) {
   const [provider, setProvider] = useState(null)
   const [account, setAccount] = useState("0x0")
   const [balance, setBalance] = useState("00")
+  const [defSigner, setDefSigner] = useState()
 
   async function connect()
   {
@@ -76,16 +77,23 @@ function ConnectionProvider ({ children }) {
     }
   }
 
+  async function initDefWall(){
+    const provider = new ethers.providers.getDefaultProvider(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL)
+    const wallet = new ethers.Wallet(process.env.NEXT_PUBLIC_FORMIC_PRIVATE_KEY, provider)
+    setDefSigner(wallet)
+  }
+
   useEffect(() => {
     if (typeof window.ethereum !== "undefined") {
       setHasMetamask(true)
       updateUI().catch(e=>console.log(e))
+      initDefWall().catch(e=>console.log(e))
     }else{if(confirm("You need a Metamask wallet to use this site,\nWould you like to install Metamask")){
       router.push("https://metamask.io/")
     }else{alert("Please install Metamask ;)")}}
   }, [account, chainId])
 
-  const payload = { hasMetamask, isConnected, chainId, signer, account, connect, balance, provider }
+  const payload = { hasMetamask, isConnected, chainId, signer, account, connect, balance, provider, defSigner }
 
   return (
     <ConnectionContext.Provider value={payload}>

@@ -51,7 +51,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
   }
 
   useEffect(()=>{
-    isConnected && address && getFloorNFT(address)
+    address && getFloorNFT(address)
   }, [isConnected, loaded])
 
 

@@ -44,7 +44,7 @@ export default function NFTGrid({ connect, isConnected, chainId, signer, address
     {
       await getNFTData()
     }
-    isConnected && runUI()
+    runUI()
   },[isConnected, currentOffset])
 
   return (
@@ -52,12 +52,14 @@ export default function NFTGrid({ connect, isConnected, chainId, signer, address
       {!address ? console.log("Loading..") : !currentNFTData ? <p>Loading...</p> 
         : <CollectionHeader address={address} isConnected={isConnected} signer={signer}/>
       }
-      <div className={isConnected ? styles["apio__NFTGrid--isConnected"] : styles["apio__NFTGrid--toConnect"]}>
+      {/* <div className={isConnected ? styles["apio__NFTGrid--isConnected"] : styles["apio__NFTGrid--toConnect"]}> */}
+      <div className={styles["apio__NFTGrid--isConnected"]}>
         <p>You need to connect your wallet to view NFTs</p>
         <button onClick={connect}>Connect your wallet</button>
       </div>
       <div className={styles["apio__NFTGrid--grid_container"]}>
-        <div className={isConnected ? styles["apio__NFTGrid--grid"] : styles["apio__NFTGrid--notConnected"]}>
+        {/* <div className={isConnected ? styles["apio__NFTGrid--grid"] : styles["apio__NFTGrid--notConnected"]}> */}
+        <div className={styles["apio__NFTGrid--grid"]}>
           {!currentNFTData ? <p>Loading...</p> : currentNFTData.map((NFT, index)=>{
             const { price, tokenId, nftAddress, seller } = NFT
             return (
