@@ -2,6 +2,8 @@ import Image from "next/image"
 import { truncateStr } from "../../utils/truncateStr"
 import { ethers, BigNumber } from "ethers"
 import { useState, useEffect } from "react"
+import ERC721ABI from "../../constants/abis/ERC721.json"
+import AERC721 from "../../constants/abis/AERC721.json"
 import { GET_FLOOR_NFT, GET_COLLECTION } from "../../constants/subGraphQueries"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
 import getABI from "../../utils/getABI"
@@ -19,6 +21,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
   const [floorPrice, setFloorPrice] = useState(BigNumber.from("0"))
   const [tknSupply, setTknSupply] = useState("")
   const [listedCount, setListedCount] = useState("")
+  const [failedTs, setFailedTs] = useState(false)
 
   async function getFloorNFT(nftAddress)
   {
@@ -45,14 +48,32 @@ export default function CollectionHeader({ name, address, isConnected, signer })
     const imgURI = await fetch(tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")).then(res=>res.json()).then(data=>data.image.replace("ipfs://", "https://ipfs.io/ipfs/"))
     setImageURI(imgURI)
 
-    const ERC721Supply = await fetch(`https://api-sepolia.etherscan.io/api?module=stats&action=tokensupply&contractaddress=${address}&apikey=${process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY}`).then(res=>res.json()).then(data=>data.result)
-    ERC721Supply == "0" ? setTknSupply("Inf") : setTknSupply(ERC721Supply)
+    try {
+      const ERC721Ct = new ethers.Contract(nftAddress, ERC721ABI.abi, signer)
+      const supply = await ERC721Ct.totalSupply()
+      setTknSupply(supply.toString())
+    } catch (error) {
+      setFailedTs(true)
+      setTknSupply("—")
+    }
+
+    if(failedTs){
+      try {
+        const AERC721Ct = new ethers.Contract(nftAddress, AERC721.abi, signer)
+        const aSupply = await AERC721Ct.getTokenCounter()
+        aSupply ? setTknSupply(aSupply.toString()) : "--"
+      } catch (error) {
+        setTknSupply("--")
+        console.log(error)
+      }
+    }
+
     setListedCount(collectionData.data.collectionFound.listedCount)
   }
 
   useEffect(()=>{
     address && getFloorNFT(address)
-  }, [isConnected, loaded])
+  }, [isConnected, loaded, signer, failedTs])
 
 
 

@@ -43,6 +43,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  cursor: pointer;
 }
 
 .apio__header--image_container--image_frame
