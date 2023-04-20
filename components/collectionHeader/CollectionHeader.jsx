@@ -1,16 +1,18 @@
 import Image from "next/image"
 import { truncateStr } from "../../utils/truncateStr"
 import { ethers, BigNumber } from "ethers"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import ERC721ABI from "../../constants/abis/ERC721.json"
 import AERC721 from "../../constants/abis/AERC721.json"
 import { GET_FLOOR_NFT, GET_COLLECTION } from "../../constants/subGraphQueries"
 import { useQuery, ApolloClient, InMemoryCache, gql } from "@apollo/client"
 import getABI from "../../utils/getABI"
 import styles from "./CollectionHeader.module.css"
+import { ConnectionContext } from "../../contexts/connection"
 
 export default function CollectionHeader({ name, address, isConnected, signer })
 {
+  const { defSigner } = useContext(ConnectionContext)
   const [collectCollection, setCollectCollection] = useState(false)
   const [collectionName, setCollectionName] = useState(undefined)
   const [loaded, setLoaded] = useState(false)
@@ -49,7 +51,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
     setImageURI(imgURI)
 
     try {
-      const ERC721Ct = new ethers.Contract(nftAddress, ERC721ABI.abi, signer)
+      const ERC721Ct = new ethers.Contract(nftAddress, ERC721ABI.abi, defSigner)
       const supply = await ERC721Ct.totalSupply()
       setTknSupply(supply.toString())
     } catch (error) {
@@ -59,7 +61,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
 
     if(failedTs){
       try {
-        const AERC721Ct = new ethers.Contract(nftAddress, AERC721.abi, signer)
+        const AERC721Ct = new ethers.Contract(nftAddress, AERC721.abi, defSigner)
         const aSupply = await AERC721Ct.getTokenCounter()
         aSupply ? setTknSupply(aSupply.toString()) : "--"
       } catch (error) {
@@ -73,7 +75,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
 
   useEffect(()=>{
     address && getFloorNFT(address)
-  }, [isConnected, loaded, signer, failedTs])
+  }, [isConnected, loaded, signer, failedTs, defSigner])
 
 
 
@@ -100,7 +102,7 @@ export default function CollectionHeader({ name, address, isConnected, signer })
           <div className={styles["apio__collectionHeader--details_container--stat_boxes"]}>
             <div className={styles["apio__collectionHeader--details_container--stat_boxes--stat_box"]}>
               <h3>FLOOR PRICE:</h3>
-              <h3>{ethers.utils.formatUnits(floorPrice, "ether")} rETH</h3>
+              <h3>{ethers.utils.formatUnits(floorPrice, "ether")} sETH</h3>
             </div>
             <div className={styles["apio__collectionHeader--details_container--stat_boxes--stat_box"]}>
               <h3>LISTED:</h3>
