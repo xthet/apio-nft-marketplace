@@ -175,7 +175,7 @@ export default function NFTCard({ price, nftAddress, tokenId, seller, account, s
         }
       
         <div className={styles["apio__NFTCard--text--price"]}>
-          <h3>{ethers.utils.formatUnits(price, "ether")} rETH</h3>
+          <h3>{ethers.utils.formatUnits(price, "ether")} sETH</h3>
           <p>
             <FontAwesomeIcon icon="fa-brands fa-ethereum" className={styles["apio__NFTCard--eth_icon"]}/>
           </p>

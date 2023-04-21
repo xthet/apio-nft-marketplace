@@ -65,7 +65,7 @@ export default function CollectionCard({ address, isConnected, signer })
         </a>
         <div className={styles["apio__collectionCard--text--price"]}>
           <div className={styles["apio__collectionCard--floor_price"]}>
-            <p>Floor Price: {ethers.utils.formatUnits(floorPrice, "ether") || "0.0"} rETH</p>
+            <p>Floor Price: {ethers.utils.formatUnits(floorPrice, "ether") || "0.0"} sETH</p>
           </div>
           <p>
             <FontAwesomeIcon icon="fa-brands fa-ethereum" className={styles["apio__collectionCard--eth_icon"]}/>
