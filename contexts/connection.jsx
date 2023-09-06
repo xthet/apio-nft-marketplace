@@ -22,7 +22,7 @@ function ConnectionProvider({ children }) {
 				setIsConnected(true)
 				const provider = new ethers.providers.Web3Provider(window.ethereum)
 				provider && setProvider(provider)
-				const signer = await provider.getSigner()
+				const signer = provider.getSigner()
 				setSigner(signer)
 				const { chainId } = await provider.getNetwork()
 				setChainId(chainId.toString())
@@ -45,7 +45,7 @@ function ConnectionProvider({ children }) {
 					const provider = new ethers.providers.Web3Provider(window.ethereum)
 					provider && setProvider(provider)
 					const balance = await provider.getBalance(accounts[0])
-					const signer = await provider.getSigner()
+					const signer = provider.getSigner()
 					setSigner(signer)
 					const { chainId } = await provider.getNetwork()
 					if (chainId.toString() !== "11155111") {
@@ -86,10 +86,11 @@ function ConnectionProvider({ children }) {
 	}
 
 	useEffect(() => {
+		initDefWall().catch((e) => console.log(e))
+
 		if (typeof window.ethereum !== "undefined") {
 			setHasMetamask(true)
 			updateUI().catch((e) => console.log(e))
-			initDefWall().catch((e) => console.log(e))
 		} else {
 			if (
 				confirm(
