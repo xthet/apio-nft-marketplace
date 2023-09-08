@@ -91,14 +91,6 @@ function ConnectionProvider({ children }) {
 		if (typeof window.ethereum !== "undefined") {
 			setHasMetamask(true)
 			updateUI().catch((e) => console.log(e))
-		} else {
-			if (
-				confirm(
-					"You need a Web3 wallet to use this site,\nWould you like to install Metamask"
-				)
-			) {
-				router.push("https://metamask.io/")
-			}
 		}
 	}, [account, chainId])
 
